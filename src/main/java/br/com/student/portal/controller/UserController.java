@@ -5,10 +5,10 @@ import br.com.student.portal.model.User;
 import br.com.student.portal.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -22,7 +22,25 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user){
-        User newUser = userService.createUser(user);
+        var newUser = userService.createUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        var users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User userDetails){
+        var updateUser = userService.updateUser(id, userDetails);
+        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id){
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

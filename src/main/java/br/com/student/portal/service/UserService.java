@@ -4,6 +4,9 @@ import br.com.student.portal.model.User;
 import br.com.student.portal.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class UserService {
 
@@ -14,7 +17,28 @@ public class UserService {
     }
 
     public User createUser (User user){
-        var teste = userRepository.save(user);
-        return teste;
+        return userRepository.save(user);
+
     }
+
+    public List<User> getAllUsers(){
+        return userRepository.findAll();
+
+    }
+
+    public User updateUser(UUID id, User userDetails){
+        var user = userRepository.findById(id).orElseThrow();
+        user.setName(userDetails.getName());
+        user.setEmail(userDetails.getEmail());
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(UUID id){
+        var user = userRepository.findById(id).orElseThrow();
+        userRepository.delete(user);
+
+    }
+
+
 }
+
