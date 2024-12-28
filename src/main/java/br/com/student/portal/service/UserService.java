@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static br.com.student.portal.validation.UserValidator.*;
+
 @Service
 public class UserService {
 
@@ -17,6 +19,7 @@ public class UserService {
     }
 
     public User createUser (User user){
+        validateFields(user);
         return userRepository.save(user);
 
     }
