@@ -10,7 +10,7 @@ import java.time.Instant;
 
 import static java.time.Instant.now;
 
-@ControllerAdvice //controlador de excecao
+@ControllerAdvice
 public class HttpErrorExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
