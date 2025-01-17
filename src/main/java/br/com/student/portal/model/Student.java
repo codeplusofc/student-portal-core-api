@@ -3,12 +3,13 @@ package br.com.student.portal.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "student")
+@Table
 public class Student {
 
 
