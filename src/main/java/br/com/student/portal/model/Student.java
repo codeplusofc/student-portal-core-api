@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table
 public class Student {
 
 
