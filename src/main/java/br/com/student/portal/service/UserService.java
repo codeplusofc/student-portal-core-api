@@ -1,6 +1,6 @@
 package br.com.student.portal.service;
 
-import br.com.student.portal.model.User;
+import br.com.student.portal.model.UserEntity;
 import br.com.student.portal.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,20 +16,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser (User user){
-        return userRepository.save(user);
+    public UserEntity createUser (UserEntity userEntity){
+        return userRepository.save(userEntity);
 
     }
 
-    public List<User> getAllUsers(){
+    public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
 
     }
 
-    public User updateUser(UUID id, User userDetails){
+    public UserEntity updateUser(UUID id, UserEntity userEntityDetails){
         var user = userRepository.findById(id).orElseThrow();
-        user.setName(userDetails.getName());
-        user.setEmail(userDetails.getEmail());
+        user.setName(userEntityDetails.getName());
+        user.setEmail(userEntityDetails.getEmail());
         return userRepository.save(user);
     }
 
