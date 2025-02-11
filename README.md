@@ -1,1 +1,1 @@
-# student-portal-core-api
+# studentEntity-portal-core-api

@@ -1,7 +1,7 @@
 package br.com.student.portal.validation;
 
+import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.BadRequestException;
-import br.com.student.portal.model.User;
 import org.springframework.stereotype.Component;
 
 import static io.micrometer.common.util.StringUtils.isEmpty;
@@ -55,10 +55,10 @@ public class UserValidator {
         }
     }
 
-    public static void validateFields(User user) {
-        validateName(user.getName());
-        validateEmail(user.getEmail());
-        validatePassword(user.getPassword());
+    public static void validateFields(UserEntity userEntity) {
+        validateName(userEntity.getName());
+        validateEmail(userEntity.getEmail());
+        validatePassword(userEntity.getPassword());
     }
 
 }
