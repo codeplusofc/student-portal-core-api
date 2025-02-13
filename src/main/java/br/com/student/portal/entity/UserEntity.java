@@ -1,24 +1,22 @@
-package br.com.student.portal.model;
+package br.com.student.portal.entity;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
 
 import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     private String name;
-
     private String email;
-
     private String password;
-
 }

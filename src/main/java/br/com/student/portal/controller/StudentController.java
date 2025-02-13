@@ -1,7 +1,7 @@
 package br.com.student.portal.controller;
 
 
-import br.com.student.portal.model.Student;
+import br.com.student.portal.entity.StudentEntity;
 import br.com.student.portal.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,35 +20,29 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-   @PostMapping
-   public ResponseEntity<Student> createStudent(@RequestBody Student student){
-        var newStudent = studentService.createStudent(student);
-        return new ResponseEntity<>(newStudent, HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<StudentEntity> createStudent(@RequestBody StudentEntity studentEntity) {
+        var student = studentService.createStudent(studentEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(student);
 
-   }
+    }
 
-   @GetMapping
-   public ResponseEntity<List<Student>> getAllStudent(){
+    @GetMapping
+    public ResponseEntity<List<StudentEntity>> getAllStudent() {
         var students = studentService.getAllStudents();
-        return new ResponseEntity<>(students, HttpStatus.OK);
-   }
+        return ResponseEntity.ok(students);
+    }
 
-   @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable UUID id, @RequestBody Student studentDetails){
-        var updateStudent = studentService.updateStudent(id, studentDetails);
-        return new ResponseEntity<>(updateStudent, HttpStatus.OK);
-   }
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentEntity> updateStudent(@PathVariable UUID id, @RequestBody StudentEntity studentEntity) {
+        var updatedStudent = studentService.updateStudent(id, studentEntity);
+        return ResponseEntity.ok(updatedStudent);
+    }
 
-   @DeleteMapping("/{id}")
-   public ResponseEntity<Void> deleteStudent (@PathVariable UUID id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable UUID id) {
         studentService.deleteStudent(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-   }
-
-
-
-
-
-
+        return ResponseEntity.noContent().build();
+    }
 
 }
