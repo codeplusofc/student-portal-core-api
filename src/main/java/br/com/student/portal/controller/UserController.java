@@ -1,6 +1,8 @@
 package br.com.student.portal.controller;
 
 
+import br.com.student.portal.dto.UserRequest;
+import br.com.student.portal.dto.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity userEntity) {
-        var user = userService.createUser(userEntity);
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+        var user = userService.createUser(userRequest);
         return ResponseEntity.status(CREATED).body(user);
     }
 

@@ -1,5 +1,7 @@
 package br.com.student.portal.service;
 
+import br.com.student.portal.dto.UserRequest;
+import br.com.student.portal.dto.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.UserRepository;
@@ -19,9 +21,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserEntity createUser(UserEntity userEntity) {
+    public UserResponse createUser(UserRequest userRequest) {
+        var userEntity = new UserEntity(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
         validateFields(userEntity);
-        return userRepository.save(userEntity);
+        var userSaved = userRepository.save(userEntity);
+        return new UserResponse(userSaved.getId(), userSaved.getName(), userSaved.getEmail());
 
     }
 
