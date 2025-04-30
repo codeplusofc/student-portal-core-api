@@ -1,10 +1,7 @@
 package br.com.student.portal.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.UUID;
@@ -19,4 +16,16 @@ public class StudentEntity {
     private String name;
     private String registration;
     private String course;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.registration == null) {
+            this.registration = generateRegistrationNumber();
+        }
+    }
+
+    private String generateRegistrationNumber() {
+        return UUID.randomUUID().toString().split("-")[0]
+                .toUpperCase();
+    }
 }
