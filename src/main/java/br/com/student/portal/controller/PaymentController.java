@@ -35,22 +35,8 @@ public class PaymentController {
     }
 
     @PostMapping
-    public Payment createPendingPayment(@RequestParam Long studentId,
-                                        @RequestParam Double amount,
-                                        @RequestParam String dueDate) {
-        return paymentService.createPendingPayment(studentId, amount, LocalDate.parse(dueDate));
-    }
-
-    @PostMapping
     public Payment createPayment(@RequestBody Payment payment) {
         return paymentService.createPayment(payment);
-    }
-
-    @PutMapping("/{id}/pay")
-    public ResponseEntity<Payment> registerPayment(@PathVariable Long id, @RequestParam String method) {
-        return paymentService.registerPayment(id, method)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
