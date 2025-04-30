@@ -10,8 +10,6 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Getter
-@Setter
 public class UserEntity {
 
     @Id
