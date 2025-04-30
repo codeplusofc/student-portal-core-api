@@ -29,6 +29,12 @@ public class UserValidator {
         }
     }
 
+    public static void validateRegistration(String registration) {
+        if (isEmpty(registration)) {
+            validateRequiredField(registration, "Name");
+        }
+    }
+
     public static void validateEmail(String email) {
         if (isEmpty(email)) {
             validateRequiredField(email, "Email");
@@ -59,6 +65,7 @@ public class UserValidator {
         validateName(userEntity.getName());
         validateEmail(userEntity.getEmail());
         validatePassword(userEntity.getPassword());
+        validateRegistration(userEntity.getRegistration());
     }
 
 }
