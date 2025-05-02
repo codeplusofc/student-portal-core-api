@@ -27,6 +27,12 @@ public class StudentController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentEntity> getStudentById(@PathVariable UUID id) {
+        var student = studentService.findStudentById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(student);
+    }
+
     @GetMapping
     public ResponseEntity<List<StudentEntity>> getAllStudent() {
         var students = studentService.getAllStudents();

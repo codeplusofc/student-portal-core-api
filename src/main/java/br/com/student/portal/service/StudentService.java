@@ -47,10 +47,9 @@ public class StudentService {
         studentRepository.delete(student);
     }
 
-    private StudentEntity findStudentById(UUID id) {
+    public StudentEntity findStudentById(UUID id) {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User with id " + id + " not found"));
     }
-
 
 }
