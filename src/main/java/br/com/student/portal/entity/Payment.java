@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Entity
@@ -13,17 +14,17 @@ import java.time.LocalDate;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    private Long studentId;
+    private UUID studentId;
     private Double amount;
     private LocalDate paymentDate;
     private LocalDate dueDate;
     private String status;
     private String paymentMethod;
 
-    public Payment(Long studentId, Double amount, LocalDate dueDate, String status, String paymentMethod) {
+    public Payment(UUID studentId, Double amount, LocalDate dueDate, String status, String paymentMethod) {
         this.studentId = studentId;
         this.amount = amount;
         this.dueDate = dueDate;

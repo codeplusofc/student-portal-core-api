@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -21,14 +22,14 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
+    public ResponseEntity<Payment> getPaymentById(@PathVariable UUID id) {
         var payment = paymentService.getPaymentById(id);
         return payment.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/student/{studentId}")
-    public List<Payment> getPaymentsByStudentId(@PathVariable Long studentId) {
+    public List<Payment> getPaymentsByStudentId(@PathVariable UUID studentId) {
         return paymentService.getPaymentsByStudentId(studentId);
     }
 
