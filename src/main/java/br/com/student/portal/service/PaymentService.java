@@ -47,7 +47,7 @@ public class PaymentService {
                 });
     }
 
-    public void deletePayment(Long id) {
+    public void deletePayment(UUID id) {
         paymentRepository.deleteById(id);
     }
 
