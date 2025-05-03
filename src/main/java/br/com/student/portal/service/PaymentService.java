@@ -1,6 +1,6 @@
 package br.com.student.portal.service;
 
-import br.com.student.portal.model.Payment;
+import br.com.student.portal.entity.Payment;
 import br.com.student.portal.repository.PaymentRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PaymentService {
@@ -22,11 +23,11 @@ public class PaymentService {
         return paymentRepository.findAll();
     }
 
-    public Optional<Payment> getPaymentById(Long id) {
+    public Optional<Payment> getPaymentById(UUID id) {
         return paymentRepository.findById(id);
     }
 
-    public List<Payment> getPaymentsByStudentId(Long studentId) {
+    public List<Payment> getPaymentsByStudentId(UUID studentId) {
         return paymentRepository.findByStudentId(studentId);
     }
 
@@ -46,7 +47,7 @@ public class PaymentService {
                 });
     }
 
-    public void deletePayment(Long id) {
+    public void deletePayment(UUID id) {
         paymentRepository.deleteById(id);
     }
 
