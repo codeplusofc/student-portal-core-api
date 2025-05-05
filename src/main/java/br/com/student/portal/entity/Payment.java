@@ -17,15 +17,18 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private UUID studentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private StudentEntity student;
+
     private Double amount;
     private LocalDate paymentDate;
     private LocalDate dueDate;
     private String status;
     private String paymentMethod;
 
-    public Payment(UUID studentId, Double amount, LocalDate dueDate, String status, String paymentMethod) {
-        this.studentId = studentId;
+    public Payment(StudentEntity student, Double amount, LocalDate dueDate, String status, String paymentMethod) {
+        this.student = student;
         this.amount = amount;
         this.dueDate = dueDate;
         this.status = status;
