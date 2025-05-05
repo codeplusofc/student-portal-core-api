@@ -1,7 +1,9 @@
 package br.com.student.portal.service;
 
 import br.com.student.portal.entity.Payment;
+import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.PaymentRepository;
+import br.com.student.portal.repository.StudentRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.UUID;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final StudentRepository studentRepository;
 
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository, StudentRepository studentRepository) {
         this.paymentRepository = paymentRepository;
+        this.studentRepository = studentRepository;
     }
 
     public List<Payment> getAllPayments() {
@@ -31,12 +35,16 @@ public class PaymentService {
         return paymentRepository.findByStudentId(studentId);
     }
 
-    public Payment createPayment(Payment payment) {
-        payment.setPaymentDate(LocalDate.now());
-        payment.setStatus("PAGO");
+    public Payment createPayment(UUID studentId, Payment payment) {
+        var student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new ObjectNotFoundException("Aluno não encontrado com ID: " + studentId));
+
+        payment.setStudent(student);
+        payment.setPaymentDate(null);
+        payment.setStatus("PENDENTE");
+
         return savePayment(payment);
     }
-
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateOverduePayments() {
@@ -45,6 +53,16 @@ public class PaymentService {
                     payment.setStatus("ATRASADO");
                     savePayment(payment);
                 });
+    }
+
+    public Payment markAsPaid(UUID paymentId) {
+        var payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
+
+        payment.setStatus("PAGO");
+        payment.setPaymentDate(LocalDate.now());
+
+        return paymentRepository.save(payment);
     }
 
     public void deletePayment(UUID id) {

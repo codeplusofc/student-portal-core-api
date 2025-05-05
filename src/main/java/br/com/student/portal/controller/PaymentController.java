@@ -33,9 +33,14 @@ public class PaymentController {
         return paymentService.getPaymentsByStudentId(studentId);
     }
 
-    @PostMapping
-    public Payment createPayment(@RequestBody Payment payment) {
-        return paymentService.createPayment(payment);
+    @PutMapping("/{paymentId}/pay")
+    public Payment pay(@PathVariable UUID paymentId) {
+        return paymentService.markAsPaid(paymentId);
+    }
+
+    @PostMapping("/{studentId}")
+    public Payment createPayment(@PathVariable UUID studentId, @RequestBody Payment payment) {
+        return paymentService.createPayment(studentId, payment);
     }
 
     @DeleteMapping("/{id}")
