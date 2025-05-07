@@ -30,13 +30,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         var users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable UUID id, @RequestBody UserEntity userEntityDetails) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @RequestBody UserRequest userEntityDetails) {
         var updatedUser = userService.updateUser(id, userEntityDetails);
         return ResponseEntity.ok(updatedUser);
     }

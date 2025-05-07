@@ -1,5 +1,6 @@
 package br.com.student.portal.validation;
 
+import br.com.student.portal.dto.UserRequest;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.BadRequestException;
 import org.springframework.stereotype.Component;
@@ -59,6 +60,11 @@ public class UserValidator {
         validateName(userEntity.getName());
         validateEmail(userEntity.getEmail());
         validatePassword(userEntity.getPassword());
+    }
+    public static void validateFieldsUserRequest(UserRequest userRequest) {
+        validateName(userRequest.getName());
+        validateEmail(userRequest.getEmail());
+        validatePassword(userRequest.getPassword());
     }
 
 }
