@@ -5,12 +5,15 @@ import br.com.student.portal.dto.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static br.com.student.portal.validation.UserValidator.validateFields;
+import static br.com.student.portal.validation.UserValidator.validateFieldsUserRequest;
 
 @Service
 public class UserService {
@@ -29,26 +32,30 @@ public class UserService {
 
     }
 
-    public List<UserEntity> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         var users = userRepository.findAll();
 
         if (users.isEmpty()) {
             throw new ObjectNotFoundException("No users found");
         }
 
-        return users;
+        return users.stream()
+                .map(userEntity -> new UserResponse(userEntity.getId() , userEntity.getName() , userEntity.getEmail() ))
+                .collect(Collectors.toList());
     }
 
-    public UserEntity updateUser(UUID id, UserEntity userEntity) {
+    public UserResponse updateUser(UUID id, UserRequest userRequest) {
         var user = findUserById(id);
 
-        validateFields(userEntity);
+        validateFieldsUserRequest(userRequest);
 
-        user.setName(userEntity.getName());
-        user.setEmail(userEntity.getEmail());
-        user.setPassword(userEntity.getPassword());
+        user.setName(userRequest.getName());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());
+        var userSaved = userRepository.save(user);
 
-        return userRepository.save(user);
+        return new UserResponse(userSaved.getId(), userSaved.getName(), userSaved.getEmail());
+
     }
 
     public void deleteUser(UUID id) {
