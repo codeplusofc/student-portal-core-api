@@ -5,6 +5,11 @@ import br.com.student.portal.dto.UserRequest;
 import br.com.student.portal.dto.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +28,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Create User")
+    @ApiResponses(value = {
+    @ApiResponse(responseCode = "201", description = "User created with sucessful",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = UserEntity.class))),
+    @ApiResponse(responseCode = "400", description = "User already exists")})
     @PostMapping("/create")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
         var user = userService.createUser(userRequest);
@@ -42,7 +53,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id){
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
