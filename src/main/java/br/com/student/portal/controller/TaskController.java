@@ -20,7 +20,7 @@ public class TaskController {
 
     @PostMapping("/create")
     public TaskEntity createTask(@RequestBody TaskEntity taskEntity){
-        return taskService.taskCreate(taskEntity);
+        return taskService.createTask(taskEntity);
     }
     @DeleteMapping("/{id}")
     public void taskDelete(@PathVariable UUID id){
