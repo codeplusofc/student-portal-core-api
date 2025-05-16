@@ -10,21 +10,22 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
+import static br.com.student.portal.validation.TaskValidator.validateTaskFields;
+
 @Service
 @AllArgsConstructor
 public class TaskService {
-    private TaskValidator taskValidator;
-    private TaskRepository taskRepository;
+
+    private final TaskRepository taskRepository;
+
     public Optional<TaskEntity> findTaskById(UUID id){
         return taskRepository.findById(id);
 
     }
     public TaskEntity createTask(TaskEntity taskEntity){
-        taskValidator.validateName(taskEntity.getName());
-        taskValidator.validateDeadLine(taskEntity.getDeadline());
-        taskValidator.validateDescription(taskEntity.getDescription());
-        taskValidator.validateTitle(taskEntity.getTitle());
-        taskValidator.validateCourse(taskEntity.getCourse());
+
+        validateTaskFields(taskEntity);
+
         return taskRepository.save(taskEntity);
     }
     public void taskDelete(UUID id){
