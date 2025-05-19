@@ -1,5 +1,7 @@
 package br.com.student.portal.validation;
 
+import br.com.student.portal.entity.TaskEntity;
+import br.com.student.portal.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -7,33 +9,41 @@ import java.util.Date;
 
 @Component
 public class TaskValidator {
-    public void validateName(String name){
+    public static void validateName(String name){
         if(name.isEmpty()){
-            throw new RuntimeException("Name can't be empty");
+            throw new BadRequestException("Name can't be empty");
         }
 
     }
-    public void validateDeadLine(LocalDateTime deadline){
+    public static void validateDeadLine(LocalDateTime deadline){
         if(deadline == null){
-            throw new RuntimeException("Date can't be null");
+            throw new BadRequestException("Date can't be null");
         }
         if(deadline.isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Date can't be in the paste");
+            throw new BadRequestException("Date can't be in the paste");
         }
     }
-    public void validateDescription(String description){
+    public static void validateDescription(String description){
         if (description.isEmpty()){
-            throw new RuntimeException("Description can't be empty");
+            throw new BadRequestException("Description can't be empty");
         }
     }
-    public void validateTitle(String title){
+    public static void validateTitle(String title){
         if(title.isEmpty()){
-            throw new RuntimeException("Title can't be empty");
+            throw new BadRequestException("Title can't be empty");
         }
     }
-    public void validateCourse(String course){
+    public static void validateCourse(String course){
         if (course.isEmpty()){
-            throw new RuntimeException("Course can't be empty");
+            throw new BadRequestException("Course can't be empty");
         }
+    }
+
+    public static void validateTaskFields(TaskEntity taskEntity){
+        validateName(taskEntity.getName());
+        validateDeadLine(taskEntity.getDeadline());
+        validateDescription(taskEntity.getDescription());
+        validateTitle(taskEntity.getTitle());
+        validateCourse(taskEntity.getCourse());
     }
 }
