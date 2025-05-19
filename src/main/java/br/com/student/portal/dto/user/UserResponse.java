@@ -1,4 +1,4 @@
-package br.com.student.portal.dto;
+package br.com.student.portal.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
