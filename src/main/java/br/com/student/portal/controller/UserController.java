@@ -1,8 +1,8 @@
 package br.com.student.portal.controller;
 
 
-import br.com.student.portal.dto.UserRequest;
-import br.com.student.portal.dto.UserResponse;
+import br.com.student.portal.dto.user.UserRequest;
+import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

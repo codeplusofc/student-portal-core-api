@@ -1,11 +1,10 @@
 package br.com.student.portal.service;
 
-import br.com.student.portal.dto.UserRequest;
-import br.com.student.portal.dto.UserResponse;
+import br.com.student.portal.dto.user.UserRequest;
+import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
