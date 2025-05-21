@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static br.com.student.portal.validation.StudentValidator.validateFields;
+
 @Service
 public class StudentService {
 
@@ -25,6 +27,8 @@ public class StudentService {
         var student = new StudentEntity(studentRequest.getRegistration(),
                 studentRequest.getCourse(),
                 studentRequest.getName());
+
+        validateFields(student);
 
         var studentSaved = studentRepository.save(student);
 
@@ -47,13 +51,16 @@ public class StudentService {
 
     }
 
-    public StudentEntity updateStudent(UUID id, StudentEntity studentEntity) {
+    public StudentResponse updateStudent(UUID id, StudentRequest studentRequest) {
         var student = findStudentById(id);
 
-        student.setName(studentEntity.getName());
-        student.setCourse(studentEntity.getCourse());
+        student.setName(studentRequest.getName());
+        student.setCourse(studentRequest.getCourse());
 
-        return studentRepository.save(student);
+        var studentSaved = studentRepository.save(student);
+        return new StudentResponse(studentSaved.getId(),
+                studentSaved.getName(),
+                studentSaved.getCourse());
     }
 
     public void deleteStudent(UUID id) {
