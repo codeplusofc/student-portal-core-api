@@ -56,15 +56,15 @@ public class UserValidator {
         }
     }
 
-    public static void validateFields(UserEntity userEntity) {
-        validateName(userEntity.getName());
-        validateEmail(userEntity.getEmail());
-        validatePassword(userEntity.getPassword());
-    }
+
     public static void validateFieldsUserRequest(UserRequest userRequest) {
         validateName(userRequest.getName());
         validateEmail(userRequest.getEmail());
         validatePassword(userRequest.getPassword());
     }
-
+    public static void validateFields(UserEntity userEntity) {
+        validateName(userEntity.getName());
+        validateEmail(userEntity.getEmail());
+        validatePassword(userEntity.getPassword());
+    }
 }
