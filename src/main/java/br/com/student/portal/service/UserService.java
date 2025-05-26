@@ -5,6 +5,7 @@ import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +15,11 @@ import java.util.stream.Collectors;
 import static br.com.student.portal.validation.UserValidator.validateFields;
 import static br.com.student.portal.validation.UserValidator.validateFieldsUserRequest;
 
+@AllArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public UserResponse createUser(UserRequest userRequest) {
         var userEntity = new UserEntity(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
