@@ -4,10 +4,11 @@ import br.com.student.portal.entity.VoteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface VoteRepository extends JpaRepository<VoteEntity, UUID> {
-    VoteEntity findByUserIdAndAgendaId(UUID idUser, UUID idAgenda);
+    Optional<VoteEntity> findByUserIdAndAgendaId(UUID idUser, UUID idAgenda);
 
 }
