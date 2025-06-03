@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static java.time.Instant.now;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class HttpErrorExceptionHandler {
@@ -20,6 +19,10 @@ public class HttpErrorExceptionHandler {
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<ApiError> notFound(ObjectNotFoundException e) {
         return buildErrorResponse(NOT_FOUND, e.getMessage());
+    }
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> forbidden(ForbiddenException e) {
+        return buildErrorResponse(FORBIDDEN, e.getMessage());
     }
 
     private ResponseEntity<ApiError> buildErrorResponse(HttpStatus status, String message) {
