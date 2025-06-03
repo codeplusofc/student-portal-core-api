@@ -1,5 +1,7 @@
 package br.com.student.portal.controller;
 
+import br.com.student.portal.dto.vote.VoteRequest;
+import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.VoteEntity;
 import br.com.student.portal.service.VoteService;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,8 @@ public class VoteController {
 
 
     @PostMapping("/create")
-    public VoteEntity createVote(@RequestBody VoteEntity voteEntity){
-        return voteService.createVote(voteEntity);
+    public VoteResponse createVote(@RequestBody VoteRequest voteRequest){
+        return voteService.createVote(voteRequest);
 
     }
     @GetMapping
