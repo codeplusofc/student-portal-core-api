@@ -22,16 +22,18 @@ public class VoteController {
 
 
     @PostMapping("/create")
-    public VoteResponse createVote(@RequestBody VoteRequest voteRequest){
+    public VoteResponse createVote(@RequestBody VoteRequest voteRequest) {
         return voteService.createVote(voteRequest);
 
     }
+
     @GetMapping
-    public List<VoteEntity> getAllVotes(){
+    public List<VoteEntity> getAllVotes() {
         return voteService.getAllVotes();
     }
+
     @GetMapping("/{id}")
-    public Optional<VoteEntity> findVoteById(@PathVariable UUID id){
+    public Optional<VoteEntity> findVoteById(@PathVariable UUID id) {
         return voteService.getVoteById(id);
     }
 }

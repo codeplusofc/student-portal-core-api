@@ -62,6 +62,7 @@ public class UserValidator {
         validateEmail(userRequest.getEmail());
         validatePassword(userRequest.getPassword());
     }
+
     public static void validateFields(UserEntity userEntity) {
         validateName(userEntity.getName());
         validateEmail(userEntity.getEmail());

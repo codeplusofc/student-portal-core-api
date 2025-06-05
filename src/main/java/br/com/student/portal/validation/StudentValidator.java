@@ -1,7 +1,6 @@
 package br.com.student.portal.validation;
 
 import br.com.student.portal.entity.StudentEntity;
-import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +24,13 @@ public class StudentValidator {
             throw new BadRequestException("Name should only contain letters and spaces.");
         }
     }
-    public static void validateCourse(String course){
-        if (isEmpty(course)){
+
+    public static void validateCourse(String course) {
+        if (isEmpty(course)) {
             validateRequiredField(course, "course");
         }
     }
+
     public static void validateFields(StudentEntity studentEntity) {
         validateName(studentEntity.getName());
         validateCourse(studentEntity.getCourse());
