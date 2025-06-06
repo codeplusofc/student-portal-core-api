@@ -3,7 +3,6 @@ package br.com.student.portal.service;
 import br.com.student.portal.dto.vote.VoteRequest;
 import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.VoteEntity;
-import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ForbiddenException;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.AgendaRepository;

@@ -3,7 +3,6 @@ package br.com.student.portal.controller;
 
 import br.com.student.portal.dto.student.StudentRequest;
 import br.com.student.portal.dto.student.StudentResponse;
-import br.com.student.portal.entity.StudentEntity;
 import br.com.student.portal.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -5,41 +5,44 @@ import br.com.student.portal.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Component
 public class TaskValidator {
-    public static void validateName(String name){
-        if(name.isEmpty()){
+    public static void validateName(String name) {
+        if (name.isEmpty()) {
             throw new BadRequestException("Name can't be empty");
         }
 
     }
-    public static void validateDeadLine(LocalDateTime deadline){
-        if(deadline == null){
+
+    public static void validateDeadLine(LocalDateTime deadline) {
+        if (deadline == null) {
             throw new BadRequestException("Date can't be null");
         }
-        if(deadline.isBefore(LocalDateTime.now())){
+        if (deadline.isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Date can't be in the paste");
         }
     }
-    public static void validateDescription(String description){
-        if (description.isEmpty()){
+
+    public static void validateDescription(String description) {
+        if (description.isEmpty()) {
             throw new BadRequestException("Description can't be empty");
         }
     }
-    public static void validateTitle(String title){
-        if(title.isEmpty()){
+
+    public static void validateTitle(String title) {
+        if (title.isEmpty()) {
             throw new BadRequestException("Title can't be empty");
         }
     }
-    public static void validateCourse(String course){
-        if (course.isEmpty()){
+
+    public static void validateCourse(String course) {
+        if (course.isEmpty()) {
             throw new BadRequestException("Course can't be empty");
         }
     }
 
-    public static void validateTaskFields(TaskEntity taskEntity){
+    public static void validateTaskFields(TaskEntity taskEntity) {
         validateName(taskEntity.getName());
         validateDeadLine(taskEntity.getDeadline());
         validateDescription(taskEntity.getDescription());
