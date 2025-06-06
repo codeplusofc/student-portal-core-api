@@ -5,6 +5,10 @@ import br.com.student.portal.repository.AgendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class AgendaService {
 
@@ -24,6 +28,16 @@ public class AgendaService {
             }
         }
         throw new RuntimeException("Agenda not found");
+    }
+    public AgendaEntity createAgenda(AgendaEntity agendaEntity) {
+        return agendaRepository.save(agendaEntity);
+    }
+    public List<AgendaEntity> agendaFindAll(AgendaEntity agendaEntity){
+        return agendaRepository.findAll();
+
+    }
+    public Optional<AgendaEntity> agendaFindById(UUID id){
+        return agendaRepository.findById(id);
     }
 }
 
