@@ -3,24 +3,36 @@ package br.com.student.portal.controller;
 import br.com.student.portal.entity.AgendaEntity;
 import br.com.student.portal.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/agenda")
 public class AgendaController {
 
-    //TODO: CRIAR PAUTA
-    //TODO: BUSCAR PAUTAS
-    //TODO: BUSCAR PAUTA POR ID
-    //TODO: INSERIR SESSÃO EM UMA PAUTA
-
     @Autowired
     private AgendaService agendaService;
 
-    @PostMapping
-    public AgendaEntity insertSession(AgendaEntity agendaEntity) {
+    @PostMapping("/session")
+    public AgendaEntity insertSession(@RequestBody AgendaEntity agendaEntity) {
         return agendaService.insertSession(agendaEntity);
+    }
+
+    @PostMapping
+    public AgendaEntity createAgenda(@RequestBody AgendaEntity agendaEntity) {
+        return agendaService.createAgenda(agendaEntity);
+    }
+
+    @GetMapping
+    public List<AgendaEntity> agendaFindAll() {
+        return agendaService.agendaFindAll();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<AgendaEntity> agendaFindById(@PathVariable UUID id) {
+        return agendaService.agendaFindById(id);
     }
 }
