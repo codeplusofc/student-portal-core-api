@@ -13,10 +13,6 @@ import java.util.UUID;
 @RequestMapping("/agenda")
 public class AgendaController {
 
-
-
-
-
     @Autowired
     private AgendaService agendaService;
 
@@ -26,16 +22,17 @@ public class AgendaController {
     }
 
     @PostMapping
-    public AgendaEntity createAgenda(@RequestBody AgendaEntity agendaEntity){
+    public AgendaEntity createAgenda(@RequestBody AgendaEntity agendaEntity) {
         return agendaService.createAgenda(agendaEntity);
+    }
 
-    }
     @GetMapping
-    public List<AgendaEntity> agendaFindAll(AgendaEntity agendaEntity){
-        return agendaService.agendaFindAll(agendaEntity);
+    public List<AgendaEntity> agendaFindAll() {
+        return agendaService.agendaFindAll();
     }
+
     @GetMapping("/{id}")
-    public Optional<AgendaEntity> agendaFindById(@PathVariable UUID id){
+    public Optional<AgendaEntity> agendaFindById(@PathVariable UUID id) {
         return agendaService.agendaFindById(id);
     }
 }
