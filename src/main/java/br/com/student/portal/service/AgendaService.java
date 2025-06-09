@@ -5,6 +5,10 @@ import br.com.student.portal.repository.AgendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class AgendaService {
 
@@ -14,18 +18,27 @@ public class AgendaService {
     public AgendaEntity insertSession(AgendaEntity agendaEntity) {
         var agendaResponse = agendaRepository.findById(agendaEntity.getId());
 
-        if (agendaResponse.isPresent()) {
-            if (agendaResponse.get().getDeadline() == null) {
-                if (agendaEntity.getDeadline() != null) {
-                    agendaResponse.get().setDeadline(agendaEntity.getDeadline());
-                    return agendaRepository.save(agendaResponse.get());
-                }
-                //TODO: CRIAR UM PRAZO DEFAULT CASO NÃO SEJA INSERIDO!
-            }
+        if (agendaResponse.isEmpty()) {
+            throw new RuntimeException("Agenda not found");
         }
-        throw new RuntimeException("Agenda not found");
+
+        if (agendaResponse.get().getDeadline() == null && agendaEntity.getDeadline() != null) {
+
+            agendaResponse.get().setDeadline(agendaEntity.getDeadline());
+            return agendaRepository.save(agendaResponse.get());
+        }
+        throw new RuntimeException();
+    }
+
+    public AgendaEntity createAgenda(AgendaEntity agendaEntity) {
+        return agendaRepository.save(agendaEntity);
+    }
+
+    public List<AgendaEntity> agendaFindAll() {
+        return agendaRepository.findAll();
+    }
+
+    public Optional<AgendaEntity> agendaFindById(UUID id) {
+        return agendaRepository.findById(id);
     }
 }
-
-//Se a pauta no banco já estiver com prazo, utilizamos ele
-//Se não estiver com prazo, criamos um prazo por padrão
