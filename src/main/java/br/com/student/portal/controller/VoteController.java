@@ -24,7 +24,6 @@ public class VoteController {
     @PostMapping("/create")
     public VoteResponse createVote(@RequestBody VoteRequest voteRequest) {
         return voteService.createVote(voteRequest);
-
     }
 
     @GetMapping

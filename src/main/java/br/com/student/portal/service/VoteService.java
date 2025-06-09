@@ -34,6 +34,7 @@ public class VoteService {
         var responseAgenda = agendaRepository.findById(voteEntity.getAgendaId());
         var userExists = userRepository.existsById(voteEntity.getUserId());
 
+        //TODO: Migrar para novas funções essa regra de negócio dos ifs
         if (responseAgenda.isPresent() && userExists) {
             var responseVote = voteRepository.findByUserIdAndAgendaId(voteEntity.getUserId(),
                     voteEntity.getAgendaId());
@@ -56,10 +57,12 @@ public class VoteService {
     }
 
     public List<VoteEntity> getAllVotes() {
+        //TODO: Ao não ser encontrado todos os votos, devemos lançar uma mensagem de erro
         return voteRepository.findAll();
     }
 
     public Optional<VoteEntity> getVoteById(UUID id) {
+        //TODO: Retornar mensagem de erro ao não encontrar voto
         return voteRepository.findById(id);
     }
 }

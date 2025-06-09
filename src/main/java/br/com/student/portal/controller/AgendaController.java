@@ -13,6 +13,7 @@ import java.util.UUID;
 @RequestMapping("/agenda")
 public class AgendaController {
 
+    //TODO: IMPLEMENTAR BOAS PRATICAS DE ResponseEntity, OLHAR EM TODAS AS CONTROLLERS
     @Autowired
     private AgendaService agendaService;
 
