@@ -17,6 +17,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
     public Optional<TaskEntity> findTaskById(UUID id) {
+        //TODO: Ao buscar uma tarefa inexistente devemos retornar uma mensagem de erro
         return taskRepository.findById(id);
 
     }
@@ -29,6 +30,7 @@ public class TaskService {
     }
 
     public void taskDelete(UUID id) {
+        //TODO: Ao deletar uma tarefa inexistente devemos retornar uma mensagem de erro
         taskRepository.deleteById(id);
     }
 

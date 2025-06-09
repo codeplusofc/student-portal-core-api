@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Component
 public class TaskValidator {
+    //TODO: CRIAR UMA FUNÇÃO PARA MONTAR O ERRO DE BAD REQUEST PADRÃO PARA TODAS AS FUNÇÕES DO VALIDATOR, PODE OLHAR NA CLASSE DE STUDENT VALIDATOR
     public static void validateName(String name) {
         if (name.isEmpty()) {
             throw new BadRequestException("Name can't be empty");
