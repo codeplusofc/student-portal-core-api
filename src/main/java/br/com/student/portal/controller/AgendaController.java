@@ -3,37 +3,48 @@ package br.com.student.portal.controller;
 import br.com.student.portal.entity.AgendaEntity;
 import br.com.student.portal.service.AgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.springframework.http.HttpStatus.*;
+
 @RestController
 @RequestMapping("/agenda")
 public class AgendaController {
 
-    //TODO: IMPLEMENTAR BOAS PRATICAS DE ResponseEntity, OLHAR EM TODAS AS CONTROLLERS
     @Autowired
     private AgendaService agendaService;
 
     @PostMapping("/session")
-    public AgendaEntity insertSession(@RequestBody AgendaEntity agendaEntity) {
-        return agendaService.insertSession(agendaEntity);
+    public ResponseEntity<AgendaEntity> insertSession(@RequestBody AgendaEntity agendaEntity) {
+        var session = agendaService.insertSession(agendaEntity);
+        return ResponseEntity.status(CREATED).body(session);
+
+
     }
 
     @PostMapping
-    public AgendaEntity createAgenda(@RequestBody AgendaEntity agendaEntity) {
-        return agendaService.createAgenda(agendaEntity);
+    public ResponseEntity<AgendaEntity> createAgenda(@RequestBody AgendaEntity agendaEntity) {
+        var agenda = agendaService.createAgenda(agendaEntity);
+        return ResponseEntity.status(CREATED).body(agenda);
     }
 
     @GetMapping
-    public List<AgendaEntity> agendaFindAll() {
-        return agendaService.agendaFindAll();
+    public ResponseEntity<List<AgendaEntity>> agendaFindAll() {
+        var agenda = agendaService.agendaFindAll();
+        return ResponseEntity.status(OK).body(agenda);
+
     }
 
     @GetMapping("/{id}")
-    public Optional<AgendaEntity> agendaFindById(@PathVariable UUID id) {
-        return agendaService.agendaFindById(id);
-    }
+    public ResponseEntity<Optional<AgendaEntity>> agendaFindById(@PathVariable UUID id) {
+        var agenda = agendaService.agendaFindById(id);
+        return ResponseEntity.status(FOUND).body(agenda);
+            }
 }
+
+

@@ -1,8 +1,10 @@
 package br.com.student.portal.service;
 
 import br.com.student.portal.entity.AgendaEntity;
+import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.AgendaRepository;
+import br.com.student.portal.validation.AgendaValidator;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,25 +18,26 @@ public class AgendaService {
 
     @Autowired
     private AgendaRepository agendaRepository;
+    private AgendaValidator agendaValidator;
+
+    public AgendaService(AgendaValidator agendaValidator) {
+        this.agendaValidator = agendaValidator;
+    }
 
     public AgendaEntity insertSession(AgendaEntity agendaEntity) {
         var agendaResponse = agendaRepository.findById(agendaEntity.getId());
 
         if (agendaResponse.isEmpty()) {
-            //TODO: Ao lançar a exceção abaixo, devemos lançar um ObjectNotFoudException e não o EntityNotFoundException
-            throw new EntityNotFoundException("Agenda com ID " + agendaEntity.getId() + " não encontrada.");
+
+            throw new ObjectNotFoundException("Agenda com ID " + agendaEntity.getId() + " não encontrada.");
         }
 
         var agenda = agendaResponse.get();
+        isDeadLineUpdateNeeded(agenda, agendaEntity);
 
-        //TODO: Implementar a regra de negócio do if em uma outra função e chamar aqui dentro do insertSession
-        if (agenda.getDeadline() == null && agendaEntity.getDeadline() != null) {
 
-            agenda.setDeadline(agendaEntity.getDeadline());
-            return agendaRepository.save(agenda);
-        }
-        //TODO: Abaixo alterar a exceção para BadRequest
-        throw new RuntimeException("A data limite já está definida ou nenhuma alteração foi necessária.");
+
+        throw new BadRequestException("A data limite já está definida ou nenhuma alteração foi necessária.");
     }
 
     public AgendaEntity createAgenda(AgendaEntity agendaEntity) {
@@ -43,7 +46,7 @@ public class AgendaService {
     }
 
     public List<AgendaEntity> agendaFindAll() {
-        //TODO: Ao buscar uma lista e o retorno for vazio, devemos mostrar uma mensagem de erro
+        agendaValidator.validateAgendaR(agendaRepository);
         return agendaRepository.findAll();
     }
 
@@ -56,4 +59,13 @@ public class AgendaService {
 
         return agendaRepository.findById(id);
     }
+    private AgendaEntity isDeadLineUpdateNeeded(AgendaEntity agendaResponse, AgendaEntity agendaEntity){
+        if (agendaResponse.getDeadline() == null && agendaEntity.getDeadline() != null){
+            agendaResponse.setDeadline(agendaEntity.getDeadline());
+            return agendaRepository.save(agendaResponse);
+        }else{
+            throw new BadRequestException("Something went wrong");
+        }
+    }
+
 }
