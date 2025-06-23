@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface AgendaRepository extends JpaRepository<AgendaEntity, UUID> {
+    boolean existsByName(String name);
 }

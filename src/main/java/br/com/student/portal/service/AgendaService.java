@@ -41,7 +41,7 @@ public class AgendaService {
     }
 
     public AgendaEntity createAgenda(AgendaEntity agendaEntity) {
-        //TODO: Validar se o nome da pauta está sendo inserido corretamente
+        AgendaValidator.validateNameIfExists(agendaEntity.getName(), agendaRepository);
         return agendaRepository.save(agendaEntity);
     }
 

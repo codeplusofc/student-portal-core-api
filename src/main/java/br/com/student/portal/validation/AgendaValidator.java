@@ -22,4 +22,9 @@ public class AgendaValidator {
             throw new BadRequestException("There's no agenda");
         }
     }
+    public static void validateNameIfExists(String name, AgendaRepository agendaRepository){
+        if(agendaRepository.existsByName(name)){
+            throw new RuntimeException("There's another agenda with this name");
+        }
+    }
 }
