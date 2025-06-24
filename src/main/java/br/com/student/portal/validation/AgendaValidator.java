@@ -1,16 +1,18 @@
 package br.com.student.portal.validation;
 
-import br.com.student.portal.entity.StudentEntity;
 import br.com.student.portal.exception.BadRequestException;
+import br.com.student.portal.repository.AgendaRepository;
+import br.com.student.portal.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 import static br.com.student.portal.validation.FieldValidator.validateRequiredField;
 import static io.micrometer.common.util.StringUtils.isEmpty;
 
 @Component
-public class StudentValidator {
-
-
+public class AgendaValidator {
 
     public static void validateName(String name) {
         if (isEmpty(name)) {
@@ -21,16 +23,7 @@ public class StudentValidator {
             throw new BadRequestException("Name should only contain letters and spaces.");
         }
     }
-
-    public static void validateCourse(String course) {
-        if (isEmpty(course)) {
-            validateRequiredField(course, "course");
-        }
-    }
-
-    public static void validateFields(StudentEntity studentEntity) {
-        validateName(studentEntity.getName());
-        validateCourse(studentEntity.getCourse());
-
-    }
 }
+
+
+
