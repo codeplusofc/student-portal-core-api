@@ -15,36 +15,28 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("/agenda")
 public class AgendaController {
-
     @Autowired
     private AgendaService agendaService;
 
     @PostMapping("/session")
     public ResponseEntity<AgendaEntity> insertSession(@RequestBody AgendaEntity agendaEntity) {
-        var session = agendaService.insertSession(agendaEntity);
-        return ResponseEntity.status(CREATED).body(session);
-
-
+        return ResponseEntity.status(CREATED).body(agendaService.insertSession(agendaEntity));
     }
 
     @PostMapping
     public ResponseEntity<AgendaEntity> createAgenda(@RequestBody AgendaEntity agendaEntity) {
-        var agenda = agendaService.createAgenda(agendaEntity);
-        return ResponseEntity.status(CREATED).body(agenda);
+        return ResponseEntity.status(CREATED).body(agendaService.createAgenda(agendaEntity));
     }
 
     @GetMapping
     public ResponseEntity<List<AgendaEntity>> agendaFindAll() {
-        var agenda = agendaService.agendaFindAll();
-        return ResponseEntity.status(OK).body(agenda);
-
+        return ResponseEntity.status(OK).body(agendaService.agendaFindAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<AgendaEntity>> agendaFindById(@PathVariable UUID id) {
-        var agenda = agendaService.agendaFindById(id);
-        return ResponseEntity.status(FOUND).body(agenda);
-            }
+        return ResponseEntity.status(FOUND).body(agendaService.agendaFindById(id));
+    }
 }
 
 

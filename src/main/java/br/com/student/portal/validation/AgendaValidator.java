@@ -3,28 +3,27 @@ package br.com.student.portal.validation;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.repository.AgendaRepository;
 import br.com.student.portal.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static br.com.student.portal.validation.FieldValidator.validateRequiredField;
+import static io.micrometer.common.util.StringUtils.isEmpty;
+
 @Component
-
-
 public class AgendaValidator {
-    private AgendaRepository agendaRepository;
 
-    public AgendaValidator(AgendaRepository agendaRepository) {
-        this.agendaRepository = agendaRepository;
-    }
-
-    public static void validateAgendaR(AgendaRepository agendaRepository){
-        if(agendaRepository.findAll().isEmpty()){
-            throw new BadRequestException("There's no agenda");
+    public static void validateName(String name) {
+        if (isEmpty(name)) {
+            validateRequiredField(name, "Name");
         }
-    }
-    public static void validateNameIfExists(String name, AgendaRepository agendaRepository){
-        if(agendaRepository.existsByName(name)){
-            throw new RuntimeException("There's another agenda with this name");
+
+        if (!name.matches("^[a-zA-Z\\s]+$")) {
+            throw new BadRequestException("Name should only contain letters and spaces.");
         }
     }
 }
+
+
+

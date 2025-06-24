@@ -5,7 +5,6 @@ import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.AgendaRepository;
 import br.com.student.portal.validation.AgendaValidator;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,41 +12,38 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static br.com.student.portal.validation.AgendaValidator.validateName;
+
 @Service
 public class AgendaService {
 
     @Autowired
     private AgendaRepository agendaRepository;
-    private AgendaValidator agendaValidator;
 
-    public AgendaService(AgendaValidator agendaValidator) {
-        this.agendaValidator = agendaValidator;
-    }
 
     public AgendaEntity insertSession(AgendaEntity agendaEntity) {
         var agendaResponse = agendaRepository.findById(agendaEntity.getId());
 
         if (agendaResponse.isEmpty()) {
-
             throw new ObjectNotFoundException("Agenda com ID " + agendaEntity.getId() + " não encontrada.");
         }
 
         var agenda = agendaResponse.get();
         isDeadLineUpdateNeeded(agenda, agendaEntity);
-
-
-
         throw new BadRequestException("A data limite já está definida ou nenhuma alteração foi necessária.");
     }
 
     public AgendaEntity createAgenda(AgendaEntity agendaEntity) {
-        AgendaValidator.validateNameIfExists(agendaEntity.getName(), agendaRepository);
+        verifyAgendaFields(agendaEntity);
         return agendaRepository.save(agendaEntity);
     }
 
     public List<AgendaEntity> agendaFindAll() {
-        agendaValidator.validateAgendaR(agendaRepository);
-        return agendaRepository.findAll();
+        var agendaResponse = agendaRepository.findAll();
+        if (agendaResponse.isEmpty()) {
+            throw new ObjectNotFoundException("There's no agenda in the repository");
+        }
+        return agendaResponse;
     }
 
     public Optional<AgendaEntity> agendaFindById(UUID id) {
@@ -68,4 +64,16 @@ public class AgendaService {
         }
     }
 
+    public void verifyAgendaFields(AgendaEntity agendaEntity) {
+        validateName(agendaEntity.getName());
+        verifyNameIfExists(agendaEntity.getName());
+
+    }
+
+    public void verifyNameIfExists(String name) {
+        if (agendaRepository.existsByName(name)) {
+            throw new BadRequestException("There's another agenda with this name");
+        }
+    }
 }
+

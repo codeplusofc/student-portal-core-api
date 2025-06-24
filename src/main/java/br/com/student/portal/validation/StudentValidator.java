@@ -4,16 +4,13 @@ import br.com.student.portal.entity.StudentEntity;
 import br.com.student.portal.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
+import static br.com.student.portal.validation.FieldValidator.validateRequiredField;
 import static io.micrometer.common.util.StringUtils.isEmpty;
 
 @Component
 public class StudentValidator {
 
-    public static void validateRequiredField(Object fieldValue, String fieldName) {
-        if (fieldValue == null || (fieldValue instanceof String && isEmpty((String) fieldValue))) {
-            throw new BadRequestException(fieldName + " is a required field.");
-        }
-    }
+
 
     public static void validateName(String name) {
         if (isEmpty(name)) {
