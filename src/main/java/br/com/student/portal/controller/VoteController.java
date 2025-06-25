@@ -1,5 +1,6 @@
 package br.com.student.portal.controller;
 
+import br.com.student.portal.dto.vote.AgendaResultDTO;
 import br.com.student.portal.dto.vote.VoteRequest;
 import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.VoteEntity;
@@ -42,5 +43,10 @@ public class VoteController {
     public ResponseEntity<Optional<VoteEntity>> findVoteById(@PathVariable UUID id) {
         var vote = voteService.getVoteById(id);
         return ResponseEntity.status(FOUND).body(vote);
+    }
+    @GetMapping("/result/{id}")
+    public ResponseEntity<AgendaResultDTO> getAgendaResult(@PathVariable UUID id){
+        var agendaResult = voteService.getAgendaResult(id);
+        return ResponseEntity.status(FOUND).body(agendaResult);
     }
 }
