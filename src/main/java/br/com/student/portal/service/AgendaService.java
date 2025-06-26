@@ -56,8 +56,12 @@ public class AgendaService {
         return agendaRepository.findById(id);
     }
     private AgendaEntity isDeadLineUpdateNeeded(AgendaEntity agendaResponse, AgendaEntity agendaEntity){
-        if (agendaResponse.getDeadline() == null && agendaEntity.getDeadline() != null){
+
+        if (agendaEntity.getDeadline() != null &&
+                !agendaResponse.getDeadline().equals(agendaEntity.getDeadline())){
+
             agendaResponse.setDeadline(agendaEntity.getDeadline());
+
             return agendaRepository.save(agendaResponse);
         }else{
             throw new BadRequestException("Something went wrong");
