@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static br.com.student.portal.validation.AgendaValidator.validateName;
+import static java.time.LocalDateTime.now;
+
 
 @Service
 public class AgendaService {
@@ -30,7 +32,7 @@ public class AgendaService {
 
         var agenda = agendaResponse.get();
         isDeadLineUpdateNeeded(agenda, agendaEntity);
-        throw new BadRequestException("A data limite já está definida ou nenhuma alteração foi necessária.");
+        return agendaRepository.save(agendaResponse.get());
     }
 
     public AgendaEntity createAgenda(AgendaEntity agendaEntity) {
@@ -64,7 +66,9 @@ public class AgendaService {
 
             return agendaRepository.save(agendaResponse);
         }else{
-            throw new BadRequestException("Something went wrong");
+            var defaultDeadLine = now().plusDays(7);
+            agendaResponse.setDeadline(defaultDeadLine);
+            return agendaRepository.save(agendaResponse);
         }
     }
 
