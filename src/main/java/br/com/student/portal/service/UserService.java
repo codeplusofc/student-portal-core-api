@@ -4,6 +4,7 @@ import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
+import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     public UserResponse createUser(UserRequest userRequest) {
-        var userEntity = new UserEntity(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
+        var userEntity = userMapper.userRequestIntoUserEntity(userRequest);
+
         validateFields(userEntity);
-        var userSaved = userRepository.save(userEntity);
-        return new UserResponse(userSaved.getId(), userSaved.getName(), userSaved.getEmail());
+
+        return userMapper.userEntityIntoUserResponse(userRepository.save(userEntity));
 
     }
 
@@ -49,9 +53,8 @@ public class UserService {
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
         user.setPassword(userRequest.getPassword());
-        var userSaved = userRepository.save(user);
 
-        return new UserResponse(userSaved.getId(), userSaved.getName(), userSaved.getEmail());
+        return userMapper.userEntityIntoUserResponse(userRepository.save(user));
 
     }
 
