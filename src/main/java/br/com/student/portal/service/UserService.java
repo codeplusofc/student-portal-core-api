@@ -41,7 +41,7 @@ public class UserService {
         }
 
         return users.stream()
-                .map(userEntity -> new UserResponse(userEntity.getId() , userEntity.getName() , userEntity.getEmail() ))
+                .map(userEntity -> new UserResponse(userEntity.getId(), userEntity.getName(), userEntity.getEmail()))
                 .collect(Collectors.toList());
     }
 
