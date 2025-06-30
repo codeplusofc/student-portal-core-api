@@ -20,6 +20,7 @@ public class HttpErrorExceptionHandler {
     public ResponseEntity<ApiError> notFound(ObjectNotFoundException e) {
         return buildErrorResponse(NOT_FOUND, e.getMessage());
     }
+
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ApiError> forbidden(ForbiddenException e) {
         return buildErrorResponse(FORBIDDEN, e.getMessage());

@@ -1,5 +1,6 @@
 package br.com.student.portal.service;
 
+import br.com.student.portal.dto.vote.AgendaResultDTO;
 import br.com.student.portal.dto.vote.VoteRequest;
 import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.VoteEntity;
@@ -35,6 +36,7 @@ public class VoteService {
         var responseAgenda = agendaRepository.findById(voteEntity.getAgendaId());
         var userExists = userRepository.existsById(voteEntity.getUserId());
 
+
         if (responseAgenda.isPresent() && userExists) {
             var responseVote = voteRepository.findByUserIdAndAgendaId(voteEntity.getUserId(),
                     voteEntity.getAgendaId());
@@ -57,11 +59,38 @@ public class VoteService {
     }
 
     public List<VoteEntity> getAllVotes() {
+
         return voteRepository.findAll();
     }
 
     public Optional<VoteEntity> getVoteById(UUID id) {
         return voteRepository.findById(id);
     }
+    public AgendaResultDTO getAgendaResult(UUID id){
+        var agenda = agendaRepository.findById(id);
+        var votes = voteRepository.findByAgendaId(agenda.get().getId());
+        if(LocalDateTime.now().isBefore(agenda.get().getDeadline())){
+            throw new BadRequestException("This agenda is not over");
+        }
+
+        int yes = 0;
+        int no = 0;
+        String result = "result";
+
+        for(int counter = 0; counter<votes.size();counter++){
+            if(votes.get(counter).isVote()){
+                yes++;
+            }else{
+                no++;
+            }
+        }
+        if(yes > no){
+            result = "Agenda approved";
+        }else{
+            result = "Agenda declined";
+        }
+        return new AgendaResultDTO(id, yes, no, result);
+    }
+
 }
 

@@ -30,10 +30,10 @@ public class UserController {
 
     @Operation(summary = "Create User")
     @ApiResponses(value = {
-    @ApiResponse(responseCode = "201", description = "User created with sucessful",
-            content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = UserEntity.class))),
-    @ApiResponse(responseCode = "400", description = "User already exists")})
+            @ApiResponse(responseCode = "201", description = "User created with sucessful",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))),
+            @ApiResponse(responseCode = "400", description = "User already exists")})
     @PostMapping("/create")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
         var user = userService.createUser(userRequest);
