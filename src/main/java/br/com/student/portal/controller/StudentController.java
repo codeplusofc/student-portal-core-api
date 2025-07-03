@@ -1,7 +1,8 @@
 package br.com.student.portal.controller;
 
 
-import br.com.student.portal.entity.StudentEntity;
+import br.com.student.portal.dto.student.StudentRequest;
+import br.com.student.portal.dto.student.StudentResponse;
 import br.com.student.portal.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +22,21 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentEntity> createStudent(@RequestBody StudentEntity studentEntity) {
-        var student = studentService.createStudent(studentEntity);
+    public ResponseEntity<StudentResponse> createStudent(@RequestBody StudentRequest studentRequest) {
+        var student = studentService.createStudent(studentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(student);
 
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentEntity>> getAllStudent() {
+    public ResponseEntity<List<StudentResponse>> getAllStudent() {
         var students = studentService.getAllStudents();
         return ResponseEntity.ok(students);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentEntity> updateStudent(@PathVariable UUID id, @RequestBody StudentEntity studentEntity) {
-        var updatedStudent = studentService.updateStudent(id, studentEntity);
+    public ResponseEntity<StudentResponse> updateStudent(@PathVariable UUID id, @RequestBody StudentRequest studentRequest) {
+        var updatedStudent = studentService.updateStudent(id, studentRequest);
         return ResponseEntity.ok(updatedStudent);
     }
 

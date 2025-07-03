@@ -1,50 +1,61 @@
 package br.com.student.portal.service;
 
+import br.com.student.portal.dto.user.UserRequest;
+import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
+import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static br.com.student.portal.validation.UserValidator.validateFields;
+import static br.com.student.portal.validation.UserValidator.validateFieldsUserRequest;
 
+@AllArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserMapper userMapper;
 
-    public UserEntity createUser(UserEntity userEntity) {
+    public UserResponse createUser(UserRequest userRequest) {
+        var userEntity = userMapper.userRequestIntoUserEntity(userRequest);
+
         validateFields(userEntity);
-        return userRepository.save(userEntity);
+
+        return userMapper.userEntityIntoUserResponse(userRepository.save(userEntity));
 
     }
 
-    public List<UserEntity> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         var users = userRepository.findAll();
 
         if (users.isEmpty()) {
             throw new ObjectNotFoundException("No users found");
         }
 
-        return users;
+        return users.stream()
+                .map(userMapper::userEntityIntoUserResponse)
+                .collect(Collectors.toList());
     }
 
-    public UserEntity updateUser(UUID id, UserEntity userEntity) {
+    public UserResponse updateUser(UUID id, UserRequest userRequest) {
         var user = findUserById(id);
 
-        validateFields(userEntity);
+        validateFieldsUserRequest(userRequest);
 
-        user.setName(userEntity.getName());
-        user.setEmail(userEntity.getEmail());
-        user.setPassword(userEntity.getPassword());
+        user.setName(userRequest.getName());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());
 
-        return userRepository.save(user);
+        return userMapper.userEntityIntoUserResponse(userRepository.save(user));
+
     }
 
     public void deleteUser(UUID id) {
@@ -58,4 +69,6 @@ public class UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("User with id " + id + " not found"));
     }
 }
+
+
 

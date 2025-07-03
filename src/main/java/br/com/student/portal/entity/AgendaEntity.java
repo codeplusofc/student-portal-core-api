@@ -1,28 +1,21 @@
 package br.com.student.portal.entity;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
-public class UserEntity {
-
+public class AgendaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
-    private String email;
-    private String password;
+    private LocalDateTime deadline;
 
-    public UserEntity(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 }
