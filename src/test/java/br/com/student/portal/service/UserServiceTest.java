@@ -1,4 +1,4 @@
-package service;
+package br.com.student.portal.service;
 
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
@@ -17,11 +17,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import java.util.UUID;
 
+import static br.com.student.portal.data.FixedData.superUser;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
+
     @Mock
     UserMapper userMapper;
     @Mock
@@ -32,10 +34,11 @@ public class UserServiceTest {
 
     @Test
     public void mustCreateUser(){
-        var uuid = UUID.randomUUID();
-        // CRIANDO USUARIO
+
+        //TODO: adicionar lógica da criação de objetos em uma classe isolada
+        //TODO: utilizar o mock() para mocar os objetos e setar os atributos com given
         var userRequest = new UserRequest();
-        // ALTERANDO OS DADOS DO USUARIO
+
         userRequest.setEmail("1234123123@gmail.com");
         userRequest.setPassword("123@122144_1A");
         userRequest.setName("Pedrin");
@@ -47,7 +50,7 @@ public class UserServiceTest {
         var userResponse = new UserResponse();
         userResponse.setEmail("1234123123@gmail.com");
         userResponse.setName("Pedrin");
-        userResponse.setId(uuid);
+        userResponse.setId(superUser);
 
         given(userMapper.userRequestIntoUserEntity(userRequest)).willReturn(userEntity);
         given(userRepository.save(userEntity)).willReturn(userEntity);
@@ -57,12 +60,13 @@ public class UserServiceTest {
 
         assertEquals("1234123123@gmail.com", result.getEmail());
         assertEquals("Pedrin", result.getName());
-        assertEquals(uuid,uuid);
+        assertEquals(superUser, result.getId());
 
     }
 
     @Test
     public void mustGetAllUsers(){
+        //TODO: validar o id também, é sempre importante validar 100% as funcionalidades
         var userOne = new UserEntity("Gui",
                 "gui@gmail.com", "1234");
         var userTwo= new UserEntity("Otavio",
