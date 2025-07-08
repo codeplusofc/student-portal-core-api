@@ -5,21 +5,20 @@ import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
-import br.com.student.portal.service.UserService;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static br.com.student.portal.data.FixedData.superUser;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -33,15 +32,11 @@ public class UserServiceTest {
     UserService userService;
 
     @Test
-    public void mustCreateUser(){
+    public void mustCreateUser() {
 
         //TODO: adicionar lógica da criação de objetos em uma classe isolada
-        //TODO: utilizar o mock() para mocar os objetos e setar os atributos com given
-        var userRequest = new UserRequest();
 
-        userRequest.setEmail("1234123123@gmail.com");
-        userRequest.setPassword("123@122144_1A");
-        userRequest.setName("Pedrin");
+        var userRequest = new UserRequest();
 
         var userEntity = new UserEntity(userRequest.getName(),
                 userRequest.getEmail(),
@@ -65,11 +60,11 @@ public class UserServiceTest {
     }
 
     @Test
-    public void mustGetAllUsers(){
+    public void mustGetAllUsers() {
         //TODO: validar o id também, é sempre importante validar 100% as funcionalidades
         var userOne = new UserEntity("Gui",
                 "gui@gmail.com", "1234");
-        var userTwo= new UserEntity("Otavio",
+        var userTwo = new UserEntity("Otavio",
                 "otavio@gmail.com", "123456");
 
         var userOneResponse = new UserResponse();
@@ -93,5 +88,30 @@ public class UserServiceTest {
         assertEquals("Otavio", result.get(1).getName());
         assertEquals("otavio@gmail.com", result.get(1).getEmail());
 
+    }
+
+    @Test
+    public void mustUpdateUser() {
+        var userRequest = mock(UserRequest.class);
+        var uuid = superUser;
+
+        var userEntity = mock(UserEntity.class);
+        var userResponse = mock(UserResponse.class);
+
+        given(userRequest.getEmail()).willReturn("otavio@gmail.com");
+        given(userRequest.getName()).willReturn("Otavio");
+        given(userRequest.getPassword()).willReturn("Otavio1234@616");
+
+        given(userResponse.getEmail()).willReturn("otavio@gmail.com");
+        given(userResponse.getName()).willReturn("Otavio");
+
+        given(userRepository.findById(uuid)).willReturn(Optional.of(userEntity));
+        given(userMapper.userEntityIntoUserResponse(userRepository.save(userEntity))).willReturn(userResponse);
+
+        var result = userService.updateUser(uuid, userRequest);
+
+        assertEquals("otavio@gmail.com", result.getEmail());
+        assertEquals("Otavio", result.getName());
+        assertEquals(UUID.fromString("11111111-2222-3333-4444-555555555555"), superUser);
     }
 }
