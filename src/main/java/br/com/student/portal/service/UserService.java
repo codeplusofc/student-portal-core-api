@@ -8,11 +8,9 @@ import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import static br.com.student.portal.validation.UserValidator.validateFields;
 import static br.com.student.portal.validation.UserValidator.validateFieldsUserRequest;
 

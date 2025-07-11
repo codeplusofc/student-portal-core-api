@@ -4,7 +4,6 @@ import br.com.student.portal.entity.AgendaEntity;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.AgendaRepository;
-import br.com.student.portal.validation.AgendaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,21 +50,22 @@ public class AgendaService {
     public Optional<AgendaEntity> agendaFindById(UUID id) {
         var agendaOptional = agendaRepository.findById(id);
 
-        if (agendaOptional.isEmpty()){
+        if (agendaOptional.isEmpty()) {
             throw new ObjectNotFoundException("Agenda not found");
         }
 
         return agendaRepository.findById(id);
     }
-    private AgendaEntity isDeadLineUpdateNeeded(AgendaEntity agendaResponse, AgendaEntity agendaEntity){
+
+    private AgendaEntity isDeadLineUpdateNeeded(AgendaEntity agendaResponse, AgendaEntity agendaEntity) {
 
         if (agendaEntity.getDeadline() != null &&
-                !agendaResponse.getDeadline().equals(agendaEntity.getDeadline())){
+                !agendaResponse.getDeadline().equals(agendaEntity.getDeadline())) {
 
             agendaResponse.setDeadline(agendaEntity.getDeadline());
 
             return agendaRepository.save(agendaResponse);
-        }else{
+        } else {
             var defaultDeadLine = now().plusDays(7);
             agendaResponse.setDeadline(defaultDeadLine);
             return agendaRepository.save(agendaResponse);
