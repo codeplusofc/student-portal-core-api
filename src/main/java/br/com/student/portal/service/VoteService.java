@@ -73,6 +73,8 @@ public class VoteService {
             throw new BadRequestException("This agenda is not over");
         }
 
+        //TODO: ARRUMAR ISSO AQUI PELO AMOR DE DEUS
+
         int yes = 0;
         int no = 0;
         String result = "result";

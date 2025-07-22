@@ -1,7 +1,10 @@
 package br.com.student.portal.service;
 
+import br.com.student.portal.entity.UserEntity;
+import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,8 +19,13 @@ import static br.com.student.portal.data.FixedData.superUser;
 import static br.com.student.portal.data.UserEntityData.generateUserEntity;
 import static br.com.student.portal.data.UserRequestData.generateUserRequest;
 import static br.com.student.portal.data.UserResponseData.generateUserResponse;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -67,7 +75,12 @@ public class UserServiceTest {
         assertEquals("otaviocolela123@gmail.com", result.get(1).getEmail());
 
     }
+    @Test
+    public void mustNotFindUsers(){
+        thenThrownBy(() -> userService.getAllUsers())
+                .isInstanceOf(ObjectNotFoundException.class);
 
+    }
     @Test
     public void mustUpdateUser() {
         var userRequest = generateUserRequest();
@@ -83,5 +96,12 @@ public class UserServiceTest {
         assertEquals("otaviocolela123@gmail.com", result.getEmail());
         assertEquals("Markin", result.getName());
         assertEquals(UUID.fromString("11111111-2222-3333-4444-555555555555"), superUser);
+    }
+    @Test
+    public void mustDeleteUser(){
+        var user = new UserEntity("Otávio", "otavio@gmail.com", "Ok123412412@1");
+        given(userRepository.findById(superUser)).willReturn(Optional.of(user));
+        userService.deleteUser(superUser);
+        verify(userRepository, times(1)).delete(user);
     }
 }
