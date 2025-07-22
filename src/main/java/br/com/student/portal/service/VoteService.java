@@ -37,13 +37,16 @@ public class VoteService {
         var userExists = userRepository.existsById(voteEntity.getUserId());
 
 
+        //TODO: MIGRAR LÓGICA ABAIXO PARA OUTRA FUNÇÃO
         if (responseAgenda.isPresent() && userExists) {
             var responseVote = voteRepository.findByUserIdAndAgendaId(voteEntity.getUserId(),
                     voteEntity.getAgendaId());
 
+            //TODO: MIGRAR LÓGICA ABAIXO PARA OUTRA FUNÇÃO
             if (responseVote.isEmpty()) {
                 var agenda = responseAgenda.orElseThrow(() -> new ObjectNotFoundException("Agenda not found"));
 
+                //TODO: MIGRAR LÓGICA ABAIXO PARA OUTRA FUNÇÃO
                 if (date.isBefore(agenda.getDeadline())) {
                     var voteSaved = voteRepository.save(voteEntity);
                     return new VoteResponse(voteSaved.getId(),
@@ -59,26 +62,30 @@ public class VoteService {
     }
 
     public List<VoteEntity> getAllVotes() {
-
         return voteRepository.findAll();
     }
 
     public Optional<VoteEntity> getVoteById(UUID id) {
         return voteRepository.findById(id);
     }
+
     public AgendaResultDTO getAgendaResult(UUID id){
         var agenda = agendaRepository.findById(id);
         var votes = voteRepository.findByAgendaId(agenda.get().getId());
+
+        //TODO: MIGRAR ESSA LÓGICA PARA UMA FUNCIONALIDADE E CHAMAR AQUI
         if(LocalDateTime.now().isBefore(agenda.get().getDeadline())){
             throw new BadRequestException("This agenda is not over");
         }
 
         //TODO: ARRUMAR ISSO AQUI PELO AMOR DE DEUS
 
+        //TODO: VERIFICAR SE REALMENTE É NECESSÁRIO CRIAR ESSAS VARIAVEIS AQUI
         int yes = 0;
         int no = 0;
         String result = "result";
 
+        //TODO: IMPLEMENTAR BOAS PRÁTICAS, UTILIZAR O FOREACH
         for(int counter = 0; counter<votes.size();counter++){
             if(votes.get(counter).isVote()){
                 yes++;
@@ -86,6 +93,7 @@ public class VoteService {
                 no++;
             }
         }
+        //TODO: MIGRAR PARA UMA NOVA FUNÇÃO
         if(yes > no){
             result = "Agenda approved";
         }else{

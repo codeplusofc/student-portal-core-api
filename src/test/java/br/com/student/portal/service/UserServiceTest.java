@@ -4,7 +4,6 @@ import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,8 +23,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
-
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
