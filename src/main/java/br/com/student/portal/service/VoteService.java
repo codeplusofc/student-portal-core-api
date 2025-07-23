@@ -3,6 +3,7 @@ package br.com.student.portal.service;
 import br.com.student.portal.dto.vote.AgendaResultDTO;
 import br.com.student.portal.dto.vote.VoteRequest;
 import br.com.student.portal.dto.vote.VoteResponse;
+import br.com.student.portal.entity.AgendaEntity;
 import br.com.student.portal.entity.VoteEntity;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ForbiddenException;
@@ -31,34 +32,17 @@ public class VoteService {
                 voteRequest.getUserId(),
                 voteRequest.isVote());
 
-        var date = LocalDateTime.now();
+        var agenda = validateUserAndAgendaExists(voteEntity.getUserId(), voteEntity.getAgendaId());
 
-        var responseAgenda = agendaRepository.findById(voteEntity.getAgendaId());
-        var userExists = userRepository.existsById(voteEntity.getUserId());
+        checkIfUserHasAlreadyVoted(voteEntity.getUserId(), voteEntity.getAgendaId());
 
 
-        //TODO: MIGRAR LÓGICA ABAIXO PARA OUTRA FUNÇÃO
-        if (responseAgenda.isPresent() && userExists) {
-            var responseVote = voteRepository.findByUserIdAndAgendaId(voteEntity.getUserId(),
-                    voteEntity.getAgendaId());
-
-            //TODO: MIGRAR LÓGICA ABAIXO PARA OUTRA FUNÇÃO
-            if (responseVote.isEmpty()) {
-                var agenda = responseAgenda.orElseThrow(() -> new ObjectNotFoundException("Agenda not found"));
-
-                //TODO: MIGRAR LÓGICA ABAIXO PARA OUTRA FUNÇÃO
-                if (date.isBefore(agenda.getDeadline())) {
-                    var voteSaved = voteRepository.save(voteEntity);
-                    return new VoteResponse(voteSaved.getId(),
-                            voteSaved.isVote(),
-                            voteSaved.getUserId(),
-                            voteSaved.getAgendaId());
-                }
-
-            }
-            throw new ForbiddenException("You already voted");
-        }
-        throw new ObjectNotFoundException("User or agenda not found");
+        checkAgendaIsOpen(agenda);
+        var savedVote = voteRepository.save(voteEntity);
+        return new VoteResponse(savedVote.getId(),
+                savedVote.isVote(),
+                savedVote.getUserId(),
+                savedVote.getAgendaId());
     }
 
     public List<VoteEntity> getAllVotes() {
@@ -69,38 +53,56 @@ public class VoteService {
         return voteRepository.findById(id);
     }
 
-    public AgendaResultDTO getAgendaResult(UUID id){
+    public AgendaResultDTO getAgendaResult(UUID id) {
         var agenda = agendaRepository.findById(id);
         var votes = voteRepository.findByAgendaId(agenda.get().getId());
 
-        //TODO: MIGRAR ESSA LÓGICA PARA UMA FUNCIONALIDADE E CHAMAR AQUI
-        if(LocalDateTime.now().isBefore(agenda.get().getDeadline())){
+
+        if (LocalDateTime.now().isBefore(agenda.get().getDeadline())) {
             throw new BadRequestException("This agenda is not over");
         }
 
-        //TODO: ARRUMAR ISSO AQUI PELO AMOR DE DEUS
+        return calculateAgendaResult(agenda.get().getId(), votes);
 
-        //TODO: VERIFICAR SE REALMENTE É NECESSÁRIO CRIAR ESSAS VARIAVEIS AQUI
-        int yes = 0;
-        int no = 0;
-        String result = "result";
-
-        //TODO: IMPLEMENTAR BOAS PRÁTICAS, UTILIZAR O FOREACH
-        for(int counter = 0; counter<votes.size();counter++){
-            if(votes.get(counter).isVote()){
-                yes++;
-            }else{
-                no++;
-            }
-        }
-        //TODO: MIGRAR PARA UMA NOVA FUNÇÃO
-        if(yes > no){
-            result = "Agenda approved";
-        }else{
-            result = "Agenda declined";
-        }
-        return new AgendaResultDTO(id, yes, no, result);
     }
 
+    public AgendaEntity validateUserAndAgendaExists(UUID userId, UUID agendaId) {
+        var userExists = userRepository.findById(userId);
+        var agenda = agendaRepository.findById(agendaId);
+        if (userExists.isEmpty() || agenda.isEmpty()) {
+            throw new ObjectNotFoundException("User or agenda not found");
+        }
+        return agenda.get();
+    }
+
+
+    public void checkIfUserHasAlreadyVoted(UUID userId, UUID agendaId) {
+        boolean alreadyVoted = voteRepository.findByUserIdAndAgendaId(userId, agendaId).isPresent();
+        if (alreadyVoted) {
+            throw new ForbiddenException("You already voted");
+        }
+
+    }
+
+    public void checkAgendaIsOpen(AgendaEntity agendaEntity) {
+        if (LocalDateTime.now().isAfter(agendaEntity.getDeadline())) {
+            throw new ForbiddenException("This agenda is already closed");
+        }
+    }
+
+    public AgendaResultDTO calculateAgendaResult(UUID agendaId, List<VoteEntity> votes) {
+        long yesVotes = votes.stream().filter(VoteEntity::isVote).count();
+        long noVotes = votes.size() - yesVotes;
+        String result = "result";
+
+        if (yesVotes > noVotes) {
+            result = "Approved";
+        } else {
+            result = "Denied";
+        }
+        return new AgendaResultDTO(agendaId, yesVotes, noVotes, result);
+
 }
+}
+
 

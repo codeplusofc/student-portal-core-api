@@ -10,8 +10,8 @@ import java.util.UUID;
 @Data
 public class AgendaResultDTO {
     private UUID idAgenda;
-    private int yes;
-    private int no;
+    private long yes;
+    private long no;
     private String result;
 
 }
