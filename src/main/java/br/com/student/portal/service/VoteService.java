@@ -8,6 +8,7 @@ import br.com.student.portal.entity.VoteEntity;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ForbiddenException;
 import br.com.student.portal.exception.ObjectNotFoundException;
+import br.com.student.portal.mapper.VoteMapper;
 import br.com.student.portal.repository.AgendaRepository;
 import br.com.student.portal.repository.UserRepository;
 import br.com.student.portal.repository.VoteRepository;
@@ -26,26 +27,20 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final AgendaRepository agendaRepository;
     private final UserRepository userRepository;
+    private final VoteMapper voteMapper;
 
     public VoteResponse createVote(VoteRequest voteRequest) {
-        var voteEntity = new VoteEntity(voteRequest.getAgendaId(),
-                voteRequest.getUserId(),
-                voteRequest.isVote());
-
+        var voteEntity = voteMapper.voteRequestIntoVoteEntity(voteRequest);
         var agenda = validateUserAndAgendaExists(voteEntity.getUserId(), voteEntity.getAgendaId());
 
         checkIfUserHasAlreadyVoted(voteEntity.getUserId(), voteEntity.getAgendaId());
-
-
         checkAgendaIsOpen(agenda);
-        var savedVote = voteRepository.save(voteEntity);
-        return new VoteResponse(savedVote.getId(),
-                savedVote.isVote(),
-                savedVote.getUserId(),
-                savedVote.getAgendaId());
+
+        return voteMapper.voteEntityIntoVoteResponse(voteRepository.save(voteEntity));
     }
 
     public List<VoteEntity> getAllVotes() {
+        //TODO: MAPEAR O RETORNO USANDO O VoteMapper
         return voteRepository.findAll();
     }
 
@@ -57,18 +52,16 @@ public class VoteService {
         var agenda = agendaRepository.findById(id);
         var votes = voteRepository.findByAgendaId(agenda.get().getId());
 
-
         if (LocalDateTime.now().isBefore(agenda.get().getDeadline())) {
             throw new BadRequestException("This agenda is not over");
         }
-
         return calculateAgendaResult(agenda.get().getId(), votes);
-
     }
 
     public AgendaEntity validateUserAndAgendaExists(UUID userId, UUID agendaId) {
         var userExists = userRepository.findById(userId);
         var agenda = agendaRepository.findById(agendaId);
+
         if (userExists.isEmpty() || agenda.isEmpty()) {
             throw new ObjectNotFoundException("User or agenda not found");
         }
@@ -78,10 +71,10 @@ public class VoteService {
 
     public void checkIfUserHasAlreadyVoted(UUID userId, UUID agendaId) {
         boolean alreadyVoted = voteRepository.findByUserIdAndAgendaId(userId, agendaId).isPresent();
+
         if (alreadyVoted) {
             throw new ForbiddenException("You already voted");
         }
-
     }
 
     public void checkAgendaIsOpen(AgendaEntity agendaEntity) {
@@ -93,7 +86,7 @@ public class VoteService {
     public AgendaResultDTO calculateAgendaResult(UUID agendaId, List<VoteEntity> votes) {
         long yesVotes = votes.stream().filter(VoteEntity::isVote).count();
         long noVotes = votes.size() - yesVotes;
-        String result = "result";
+        String result;
 
         if (yesVotes > noVotes) {
             result = "Approved";
@@ -101,8 +94,7 @@ public class VoteService {
             result = "Denied";
         }
         return new AgendaResultDTO(agendaId, yesVotes, noVotes, result);
-
-}
+    }
 }
 
 
