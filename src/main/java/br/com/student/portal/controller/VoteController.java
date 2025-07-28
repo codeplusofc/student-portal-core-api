@@ -33,7 +33,7 @@ public class VoteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VoteEntity>> getAllVotes() {
+    public ResponseEntity<List<VoteResponse>> getAllVotes() {
         var vote = voteService.getAllVotes();
         return ResponseEntity.status(FOUND).body(vote);
 
