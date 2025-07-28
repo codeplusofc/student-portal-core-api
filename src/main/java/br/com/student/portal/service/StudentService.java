@@ -24,8 +24,7 @@ public class StudentService {
     }
 
     public StudentResponse createStudent(StudentRequest studentRequest) {
-        var student = new StudentEntity(studentRequest.getRegistration(),
-                studentRequest.getCourse(),
+        var student = new StudentEntity(studentRequest.getCourse(),
                 studentRequest.getName());
 
         validateFields(student);
