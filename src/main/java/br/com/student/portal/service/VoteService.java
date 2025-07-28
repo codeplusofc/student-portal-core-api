@@ -8,6 +8,7 @@ import br.com.student.portal.entity.VoteEntity;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ForbiddenException;
 import br.com.student.portal.exception.ObjectNotFoundException;
+import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.mapper.VoteMapper;
 import br.com.student.portal.repository.AgendaRepository;
 import br.com.student.portal.repository.UserRepository;
@@ -39,9 +40,12 @@ public class VoteService {
         return voteMapper.voteEntityIntoVoteResponse(voteRepository.save(voteEntity));
     }
 
-    public List<VoteEntity> getAllVotes() {
-        //TODO: MAPEAR O RETORNO USANDO O VoteMapper
-        return voteRepository.findAll();
+    public List<VoteResponse> getAllVotes() {
+        var votes = voteRepository.findAll();
+        if(votes.isEmpty()){
+            throw new ObjectNotFoundException("There's no votes");
+        }
+        return votes.stream().map(voteMapper::voteEntityIntoVoteResponse).toList();
     }
 
     public Optional<VoteEntity> getVoteById(UUID id) {
