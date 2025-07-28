@@ -40,9 +40,13 @@ public class VoteService {
         return voteMapper.voteEntityIntoVoteResponse(voteRepository.save(voteEntity));
     }
 
-    public List<VoteEntity> getAllVotes() {
-        //TODO: MAPEAR O RETORNO USANDO O VoteMapper
-        return voteRepository.findAll();
+    public List<VoteResponse> getAllVotes() {
+        var votes = voteRepository.findAll();
+
+        if(votes.isEmpty()){
+            throw new ObjectNotFoundException("There's no votes");
+        }
+        return votes.stream().map(voteMapper::voteEntityIntoVoteResponse).toList();
     }
 
     public Optional<VoteEntity> getVoteById(UUID id) {
