@@ -1,13 +1,9 @@
 package br.com.student.portal.validation;
 
 import br.com.student.portal.dto.user.UserRequest;
-import br.com.student.portal.entity.AgendaEntity;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.BadRequestException;
-import br.com.student.portal.repository.UserRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 import static br.com.student.portal.validation.FieldValidator.validateRequiredField;
 import static io.micrometer.common.util.StringUtils.isEmpty;
@@ -18,7 +14,6 @@ public class UserValidator {
 
 
     //TODO: adding regex on the one Utils
-
 
 
     public static void validateName(String name) {
@@ -69,7 +64,6 @@ public class UserValidator {
         validateEmail(userEntity.getEmail());
         validatePassword(userEntity.getPassword());
     }
-
 
 
 }

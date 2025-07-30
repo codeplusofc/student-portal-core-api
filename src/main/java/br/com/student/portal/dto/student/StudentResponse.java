@@ -13,6 +13,7 @@ public class StudentResponse {
     private UUID id;
     private String name;
     private String course;
+    private String registration;
 
 
 }

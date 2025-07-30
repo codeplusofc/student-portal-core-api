@@ -10,6 +10,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
     public static final UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-    public abstract UserEntity  userRequestIntoUserEntity(UserRequest userRequest);
+
+    public abstract UserEntity userRequestIntoUserEntity(UserRequest userRequest);
+
     public abstract UserResponse userEntityIntoUserResponse(UserEntity userEntity);
 }

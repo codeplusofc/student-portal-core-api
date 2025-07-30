@@ -1,6 +1,5 @@
 package br.com.student.portal.service;
 
-
 import br.com.student.portal.dto.student.StudentRequest;
 import br.com.student.portal.dto.student.StudentResponse;
 import br.com.student.portal.entity.StudentEntity;
@@ -24,8 +23,8 @@ public class StudentService {
     }
 
     public StudentResponse createStudent(StudentRequest studentRequest) {
-        var student = new StudentEntity(studentRequest.getCourse(),
-                studentRequest.getName());
+        var student = new StudentEntity(studentRequest.getName(),
+                studentRequest.getCourse());
 
         validateFields(student);
 
@@ -33,7 +32,7 @@ public class StudentService {
 
         return new StudentResponse(studentSaved.getId(),
                 studentSaved.getName(),
-                studentSaved.getCourse());
+                studentSaved.getCourse(), studentSaved.getRegistration());
     }
 
     public List<StudentResponse> getAllStudents() {
@@ -46,7 +45,7 @@ public class StudentService {
         return students.stream()
                 .map(studentEntity -> new StudentResponse(studentEntity.getId(),
                         studentEntity.getName(),
-                        studentEntity.getCourse())).collect(Collectors.toList());
+                        studentEntity.getCourse(), studentEntity.getRegistration())).collect(Collectors.toList());
 
     }
 
@@ -59,7 +58,7 @@ public class StudentService {
         var studentSaved = studentRepository.save(student);
         return new StudentResponse(studentSaved.getId(),
                 studentSaved.getName(),
-                studentSaved.getCourse());
+                studentSaved.getCourse(), studentSaved.getRegistration());
     }
 
     public void deleteStudent(UUID id) {

@@ -11,6 +11,7 @@ import java.util.UUID;
 @Repository
 public interface VoteRepository extends JpaRepository<VoteEntity, UUID> {
     Optional<VoteEntity> findByUserIdAndAgendaId(UUID idUser, UUID agendaId);
+
     List<VoteEntity> findByAgendaId(UUID agendaId);
 
 }

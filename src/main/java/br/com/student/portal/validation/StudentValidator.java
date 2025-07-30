@@ -11,7 +11,6 @@ import static io.micrometer.common.util.StringUtils.isEmpty;
 public class StudentValidator {
 
 
-
     public static void validateName(String name) {
         if (isEmpty(name)) {
             validateRequiredField(name, "Name");
