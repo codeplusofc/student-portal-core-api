@@ -26,6 +26,7 @@ import static br.com.student.portal.data.VoteEntityData.generateVoteEntity;
 import static br.com.student.portal.data.VoteRequestData.generateVoteRequest;
 import static br.com.student.portal.data.VoteResponseData.generateVoteResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.data.util.Predicates.isTrue;
 
@@ -89,8 +90,10 @@ public class VoteServiceTest {
     @Test
     public void mustNotFindVotes(){
         given(voteRepository.findAll()).willReturn(List.of());
+        assertThrows(ObjectNotFoundException.class, () -> {
 
         voteService.getAllVotes();
+    });
     }
 
 }
