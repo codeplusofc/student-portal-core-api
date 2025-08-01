@@ -44,8 +44,9 @@ public class VoteController {
         var vote = voteService.getVoteById(id);
         return ResponseEntity.status(FOUND).body(vote);
     }
+
     @GetMapping("/result/{id}")
-    public ResponseEntity<AgendaResultDTO> getAgendaResult(@PathVariable UUID id){
+    public ResponseEntity<AgendaResultDTO> getAgendaResult(@PathVariable UUID id) {
         var agendaResult = voteService.getAgendaResult(id);
         return ResponseEntity.status(FOUND).body(agendaResult);
     }

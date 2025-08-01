@@ -8,7 +8,6 @@ import br.com.student.portal.entity.VoteEntity;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.exception.ForbiddenException;
 import br.com.student.portal.exception.ObjectNotFoundException;
-import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.mapper.VoteMapper;
 import br.com.student.portal.repository.AgendaRepository;
 import br.com.student.portal.repository.UserRepository;
@@ -43,7 +42,7 @@ public class VoteService {
     public List<VoteResponse> getAllVotes() {
         var votes = voteRepository.findAll();
 
-        if(votes.isEmpty()){
+        if (votes.isEmpty()) {
             throw new ObjectNotFoundException("There's no votes");
         }
         return votes.stream().map(voteMapper::voteEntityIntoVoteResponse).toList();
@@ -63,7 +62,7 @@ public class VoteService {
         return calculateAgendaResult(agenda.get().getId(), votes);
     }
 
-    public AgendaEntity validateUserAndAgendaExists(UUID userId, UUID agendaId) {
+    private AgendaEntity validateUserAndAgendaExists(UUID userId, UUID agendaId) {
         var userExists = userRepository.findById(userId);
         var agenda = agendaRepository.findById(agendaId);
 
@@ -74,7 +73,7 @@ public class VoteService {
     }
 
 
-    public void checkIfUserHasAlreadyVoted(UUID userId, UUID agendaId) {
+    private void checkIfUserHasAlreadyVoted(UUID userId, UUID agendaId) {
         boolean alreadyVoted = voteRepository.findByUserIdAndAgendaId(userId, agendaId).isPresent();
 
         if (alreadyVoted) {
@@ -82,13 +81,13 @@ public class VoteService {
         }
     }
 
-    public void checkAgendaIsOpen(AgendaEntity agendaEntity) {
+    private void checkAgendaIsOpen(AgendaEntity agendaEntity) {
         if (LocalDateTime.now().isAfter(agendaEntity.getDeadline())) {
             throw new ForbiddenException("This agenda is already closed");
         }
     }
 
-    public AgendaResultDTO calculateAgendaResult(UUID agendaId, List<VoteEntity> votes) {
+    private AgendaResultDTO calculateAgendaResult(UUID agendaId, List<VoteEntity> votes) {
         long yesVotes = votes.stream().filter(VoteEntity::isVote).count();
         long noVotes = votes.size() - yesVotes;
         String result;
