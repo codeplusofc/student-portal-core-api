@@ -12,8 +12,9 @@ import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.*;
 
+@CrossOrigin
 @RestController
-@RequestMapping("/agenda")
+@RequestMapping("/api/agendas")
 public class AgendaController {
     @Autowired
     private AgendaService agendaService;
