@@ -2,14 +2,12 @@ package br.com.student.portal.service;
 
 
 import br.com.student.portal.dto.vote.VoteResponse;
-import br.com.student.portal.entity.VoteEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.mapper.VoteMapper;
 import br.com.student.portal.repository.AgendaRepository;
 import br.com.student.portal.repository.UserRepository;
 import br.com.student.portal.repository.VoteRepository;
 import org.junit.Test;
-import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,14 +19,12 @@ import java.util.Optional;
 import static br.com.student.portal.data.AgendaEntityData.generateAgendaEntity;
 import static br.com.student.portal.data.FixedData.*;
 import static br.com.student.portal.data.UserEntityData.generateUserEntity;
-import static br.com.student.portal.data.UserRequestData.generateUserRequest;
 import static br.com.student.portal.data.VoteEntityData.generateVoteEntity;
 import static br.com.student.portal.data.VoteRequestData.generateVoteRequest;
 import static br.com.student.portal.data.VoteResponseData.generateVoteResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.data.util.Predicates.isTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VoteServiceTest {
@@ -46,7 +42,6 @@ public class VoteServiceTest {
     @Test
     public void mustCreateVote(){
         var voteRequest = generateVoteRequest();
-        var userRequest = generateUserRequest();
         var voteEntity = generateVoteEntity();
         var agendaEntity = generateAgendaEntity();
         var userEntity = generateUserEntity();
@@ -58,8 +53,8 @@ public class VoteServiceTest {
         given(voteMapper.voteEntityIntoVoteResponse(voteEntity)).willReturn(voteResponse);
         given(voteRepository.save(voteEntity)).willReturn(voteEntity);
 
-
         var result = voteService.createVote(voteRequest);
+
         assertEquals(true, result.isVote());
         assertEquals(AGENDA_ID, result.getAgendaId());
         assertEquals(USER_ID, result.getUserId());
