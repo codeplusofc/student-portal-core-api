@@ -1,8 +1,10 @@
 package br.com.student.portal.service;
 
+import br.com.student.portal.dto.vote.AgendaResultDTO;
 import br.com.student.portal.entity.AgendaEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.AgendaRepository;
+import jakarta.validation.constraints.Null;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static br.com.student.portal.data.FixedData.AGENDA_ID;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AgendaServiceTest {
@@ -25,14 +29,16 @@ public class AgendaServiceTest {
     private AgendaRepository agendaRepository;
     @Mock
     private AgendaEntity agendaEntity;
+    @Mock
+    private AgendaEntity agendaResponse;
     @InjectMocks
     private AgendaService agendaService;
 
     @Before
     public void setup() {
-        agendaEntity = new AgendaEntity(AGENDA_ID
-                ,LocalDateTime.of(2025, 8, 7, 11, 24, 53)
-                ,"Retirada do presidente");
+        given(agendaEntity.getId()).willReturn(AGENDA_ID);
+        given(agendaEntity.getName()).willReturn("Retirada do presidente");
+        given(agendaEntity.getDeadline()).willReturn(LocalDateTime.of(2025, 8, 7, 11, 24, 53));
     }
 
     @Test
@@ -75,4 +81,31 @@ public class AgendaServiceTest {
             agendaService.agendaFindAll();
         });
     }
+    @Test
+    public void mustNotFindFindById(){
+        given(agendaRepository.findById(AGENDA_ID)).willReturn(Optional.empty());
+        ObjectNotFoundException exception = assertThrows(
+                ObjectNotFoundException.class,
+                () -> agendaService.agendaFindById(AGENDA_ID)
+        );
+        assertEquals("Agenda not found", exception.getMessage());
+
+
+
+    }
+    @Test
+    public void mustSetDefaultDeadline(){
+        given(agendaEntity.getDeadline()).willReturn(LocalDateTime.of(2025, 8, 7, 11, 24, 53));
+        given(agendaResponse.getDeadline()).willReturn(LocalDateTime.of(2025,9,3,12,22,34));
+        given(agendaRepository.findById(AGENDA_ID)).willReturn(Optional.of(agendaResponse));
+        given(agendaRepository.save(agendaEntity)).willReturn(agendaResponse);
+        var result = agendaService.isDeadLineUpdateNeeded(agendaEntity, agendaResponse);
+
+
+        assertEquals(agendaResponse, result);
+    }
 }
+
+
+
+
