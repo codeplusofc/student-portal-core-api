@@ -1,5 +1,6 @@
 package br.com.student.portal.config;
 
+import br.com.student.portal.security.SecurityFilter;
 import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
