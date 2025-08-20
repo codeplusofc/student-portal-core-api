@@ -33,7 +33,6 @@ public class UserServiceTest {
     UserRepository userRepository;
     @InjectMocks
     UserService userService;
-
     @Mock
     UserRequest userRequest;
     @Mock
@@ -65,7 +64,6 @@ public class UserServiceTest {
 
     @Test
     public void mustGetAllUsers() {
-
         var users = List.of(userEntity, userEntity);
 
         given(userRepository.findAll()).willReturn(users);
@@ -78,14 +76,12 @@ public class UserServiceTest {
         assertEquals("otaviocolela123@gmail.com", result.get(0).getEmail());
         assertEquals("Markin", result.get(1).getName());
         assertEquals("otaviocolela123@gmail.com", result.get(1).getEmail());
-
     }
 
     @Test
     public void mustNotFindUsers(){
         thenThrownBy(() -> userService.getAllUsers())
                 .isInstanceOf(ObjectNotFoundException.class);
-
     }
 
     @Test

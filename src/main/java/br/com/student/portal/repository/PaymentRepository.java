@@ -1,6 +1,6 @@
 package br.com.student.portal.repository;
 
-import br.com.student.portal.model.Payment;
+import br.com.student.portal.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
