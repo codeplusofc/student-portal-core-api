@@ -1,9 +1,13 @@
 package br.com.student.portal.service;
 
 import br.com.student.portal.entity.AgendaEntity;
+
+import br.com.student.portal.repository.AgendaRepository;
+
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.AgendaRepository;
 import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -11,11 +15,17 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
+
 import java.util.Optional;
 
 import static br.com.student.portal.data.FixedData.AGENDA_ID;
 import static org.junit.Assert.assertEquals;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
 import static org.junit.Assert.assertThrows;
 import static org.mockito.BDDMockito.given;
 
