@@ -4,6 +4,7 @@ import br.com.student.portal.entity.UserEntity;
 import com.auth0.jwt.JWT;
 
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,18 @@ public class TokenService {
             throw new RuntimeException("Erro ao gerar um token", jwtCreationException);
         }
 
+    }
+    public String validateToken(String token){
+        try {
+            var alg = HMAC256(secret);
+            return JWT.require(alg)
+                    .withIssuer("api/users")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+
+        }catch (JWTVerificationException jwtVerificationException){
+            throw new JWTVerificationException("Erro ao gerar um token", jwtVerificationException);
+        }
     }
 }
