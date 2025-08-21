@@ -14,13 +14,11 @@ import java.util.UUID;
 import static br.com.student.portal.validation.AgendaValidator.validateName;
 import static java.time.LocalDateTime.now;
 
-
 @Service
 public class AgendaService {
 
     @Autowired
     private AgendaRepository agendaRepository;
-
 
     public AgendaEntity insertSession(AgendaEntity agendaEntity) {
         var agendaResponse = agendaRepository.findById(agendaEntity.getId());
