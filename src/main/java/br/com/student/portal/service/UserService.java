@@ -24,14 +24,7 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public UserResponse createUser(UserRequest userRequest) {
-        var userEntity = userMapper.userRequestIntoUserEntity(userRequest);
 
-        validateFields(userEntity);
-
-        return userMapper.userEntityIntoUserResponse(userRepository.save(userEntity));
-
-    }
 
     public List<UserResponse> getAllUsers() {
         var users = userRepository.findAll();
