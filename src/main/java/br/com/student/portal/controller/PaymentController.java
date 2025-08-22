@@ -1,6 +1,6 @@
 package br.com.student.portal.controller;
 
-import br.com.student.portal.model.Payment;
+import br.com.student.portal.entity.Payment;
 import br.com.student.portal.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

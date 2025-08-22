@@ -1,6 +1,6 @@
 package br.com.student.portal.service;
 
-import br.com.student.portal.model.Payment;
+import br.com.student.portal.entity.Payment;
 import br.com.student.portal.repository.PaymentRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

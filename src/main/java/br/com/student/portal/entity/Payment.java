@@ -1,4 +1,4 @@
-package br.com.student.portal.model;
+package br.com.student.portal.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

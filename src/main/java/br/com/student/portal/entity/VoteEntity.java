@@ -20,10 +20,11 @@ public class VoteEntity {
     private UUID userId;
     private UUID agendaId;
 
-    public VoteEntity(UUID agendaId, UUID userId, boolean vote) {
+    public VoteEntity(UUID id, UUID agendaId, UUID userId, boolean vote) {
         this.agendaId = agendaId;
         this.userId = userId;
         this.vote = vote;
+        this.id = id;
 
     }
 }
