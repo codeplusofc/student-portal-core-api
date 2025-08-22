@@ -55,18 +55,18 @@ public class AgendaService {
         return agendaRepository.findById(id);
     }
 
-    private AgendaEntity isDeadLineUpdateNeeded(AgendaEntity agendaResponse, AgendaEntity agendaEntity) {
+    public AgendaEntity isDeadLineUpdateNeeded(AgendaEntity agenda, AgendaEntity agendaEntity) {
 
         if (agendaEntity.getDeadline() != null &&
-                !agendaResponse.getDeadline().equals(agendaEntity.getDeadline())) {
+                !agenda.getDeadline().equals(agendaEntity.getDeadline())) {
 
-            agendaResponse.setDeadline(agendaEntity.getDeadline());
+            agenda.setDeadline(agendaEntity.getDeadline());
 
-            return agendaRepository.save(agendaResponse);
+            return agendaRepository.save(agenda);
         } else {
             var defaultDeadLine = now().plusDays(7);
-            agendaResponse.setDeadline(defaultDeadLine);
-            return agendaRepository.save(agendaResponse);
+            agenda.setDeadline(defaultDeadLine);
+            return agendaRepository.save(agenda);
         }
     }
 

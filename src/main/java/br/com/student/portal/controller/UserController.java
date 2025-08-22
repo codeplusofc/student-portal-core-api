@@ -4,12 +4,14 @@ package br.com.student.portal.controller;
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
+import br.com.student.portal.security.AuthorizationService;
 import br.com.student.portal.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +26,13 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class UserController {
 
     private final UserService userService;
+    private final AuthorizationService authorizationService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthorizationService authorizationService) {
         this.userService = userService;
+        this.authorizationService = authorizationService;
     }
+
 
     @Operation(summary = "Create User")
     @ApiResponses(value = {
@@ -37,7 +42,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "User already exists")})
     @PostMapping("/create")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        var user = userService.createUser(userRequest);
+        var user = authorizationService.createUser(userRequest);
         return ResponseEntity.status(CREATED).body(user);
     }
 

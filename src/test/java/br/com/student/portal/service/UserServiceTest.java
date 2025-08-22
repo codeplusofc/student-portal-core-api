@@ -6,12 +6,14 @@ import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
+import br.com.student.portal.security.AuthorizationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,12 +41,13 @@ public class UserServiceTest {
     UserEntity userEntity;
     @Mock
     UserResponse userResponse;
-
+    @InjectMocks
+    AuthorizationService authorizationService;
     @Before
     public void setup() {
         userRequest = new UserRequest("Markin",
                 "otaviocolela123@gmail.com", "1234@OTAVIO!");
-        userEntity =  new UserEntity("Pedrin", "Pedrin@gmail.com", "Pedrin1243124@");
+        userEntity =  new UserEntity("Pedrin", "Pedrin@gmail.com", "Pedrin1243124@", "USER");
         userResponse = new UserResponse(superUser, "Markin", "otaviocolela123@gmail.com" );
     }
 
@@ -54,7 +57,8 @@ public class UserServiceTest {
         given(userRepository.save(userEntity)).willReturn(userEntity);
         given(userMapper.userEntityIntoUserResponse(userEntity)).willReturn(userResponse);
 
-        var result = userService.createUser(userRequest);
+
+        var result = authorizationService.createUser(userRequest);
 
         assertEquals("otaviocolela123@gmail.com", result.getEmail());
         assertEquals("Markin", result.getName());
