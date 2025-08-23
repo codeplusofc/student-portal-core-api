@@ -1,10 +1,7 @@
 package br.com.student.portal.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +18,10 @@ public class UserEntity {
     private String name;
     private String email;
     private String password;
+
+    @OneToOne
+    @JoinColumn(name = "student_id")
+    private StudentEntity student;
 
     public UserEntity(String name, String email, String password) {
         this.name = name;
