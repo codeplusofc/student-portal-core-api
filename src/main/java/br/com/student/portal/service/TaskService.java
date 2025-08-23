@@ -6,7 +6,7 @@ import br.com.student.portal.repository.TaskRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static br.com.student.portal.validation.TaskValidator.validateTaskFields;
@@ -17,11 +17,14 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    public Optional<TaskEntity> findTaskById(UUID id) {
-        if (taskRepository.findById(id).isEmpty()) {
-            throw new ObjectNotFoundException("There's no task with this id");
+    public List<TaskEntity> findTasksByStudent(UUID studentId) {
+        var tasks = taskRepository.findByStudentId(studentId);
+
+        if (tasks.isEmpty()) {
+            throw new ObjectNotFoundException("This student has no tasks registered.");
         }
-        return taskRepository.findById(id);
+
+        return tasks;
 
     }
 

@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
-import static org.apache.tomcat.websocket.Constants.FOUND;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -18,10 +17,10 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<TaskEntity>> findTaskById(@PathVariable UUID id) {
-        var task = taskService.findTaskById(id);
-        return ResponseEntity.status(FOUND).body(task);
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<TaskEntity>> findTasksByStudent(@PathVariable UUID studentId) {
+        var tasks = taskService.findTasksByStudent(studentId);
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping("/create")

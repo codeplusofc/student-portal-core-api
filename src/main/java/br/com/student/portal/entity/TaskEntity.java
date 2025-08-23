@@ -1,9 +1,6 @@
 package br.com.student.portal.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -22,5 +19,9 @@ public class TaskEntity {
     private String title;
     private boolean received;
     private String course;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private StudentEntity student;
 
 }
