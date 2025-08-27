@@ -24,7 +24,7 @@ public class TokenService {
             return JWT.create()
                     .withIssuer("api/users")
                     .withSubject(userEntity.getName())
-                    .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("+02:00")))
+                    .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")))
                     .sign(alg);
 
         }catch (JWTCreationException jwtCreationException){

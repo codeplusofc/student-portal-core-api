@@ -1,5 +1,6 @@
 package br.com.student.portal.service;
 
+import br.com.student.portal.controller.AuthController;
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
@@ -42,7 +43,7 @@ public class UserServiceTest {
     @Mock
     UserResponse userResponse;
     @InjectMocks
-    AuthorizationService authorizationService;
+    AuthController authController;
     @Before
     public void setup() {
         userRequest = new UserRequest("Markin",
@@ -58,7 +59,7 @@ public class UserServiceTest {
         given(userMapper.userEntityIntoUserResponse(userEntity)).willReturn(userResponse);
 
 
-        var result = authorizationService.createUser(userRequest);
+        var result = authController.createUser(userRequest);
 
         assertEquals("otaviocolela123@gmail.com", result.getEmail());
         assertEquals("Markin", result.getName());

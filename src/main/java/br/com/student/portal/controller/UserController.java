@@ -26,13 +26,12 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class UserController {
 
     private final UserService userService;
-    private final AuthorizationService authorizationService;
+    private final AuthController authController;
 
-    public UserController(UserService userService, AuthorizationService authorizationService) {
+    public UserController(UserService userService, AuthController authController) {
         this.userService = userService;
-        this.authorizationService = authorizationService;
+        this.authController = authController;
     }
-
 
     @Operation(summary = "Create User")
     @ApiResponses(value = {
@@ -40,9 +39,10 @@ public class UserController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserEntity.class))),
             @ApiResponse(responseCode = "400", description = "User already exists")})
+
     @PostMapping("/create")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        var user = authorizationService.createUser(userRequest);
+        var user = authController.createUser(userRequest);
         return ResponseEntity.status(CREATED).body(user);
     }
 
