@@ -1,4 +1,4 @@
-package br.com.student.portal.security;
+package br.com.student.portal.config.security;
 
 
 import br.com.student.portal.dto.user.UserRequest;

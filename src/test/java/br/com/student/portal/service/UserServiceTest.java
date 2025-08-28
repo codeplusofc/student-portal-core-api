@@ -1,20 +1,17 @@
 package br.com.student.portal.service;
 
-import br.com.student.portal.controller.AuthController;
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
-import br.com.student.portal.security.AuthorizationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
