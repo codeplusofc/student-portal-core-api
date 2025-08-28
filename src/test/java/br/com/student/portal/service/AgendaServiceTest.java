@@ -107,7 +107,6 @@ public class AgendaServiceTest {
     public void mustSetDefaultDeadline(){
         given(agendaEntity.getDeadline()).willReturn(LocalDateTime.of(2025, 8, 7, 11, 24, 53));
         given(agendaResponse.getDeadline()).willReturn(LocalDateTime.of(2025,9,3,12,22,34));
-        given(agendaRepository.findById(AGENDA_ID)).willReturn(Optional.of(agendaResponse));
         given(agendaRepository.save(agendaEntity)).willReturn(agendaResponse);
         var result = agendaService.isDeadLineUpdateNeeded(agendaEntity, agendaResponse);
 

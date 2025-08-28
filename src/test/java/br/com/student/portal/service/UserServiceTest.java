@@ -50,7 +50,7 @@ public class UserServiceTest {
         userEntity =  new UserEntity("Pedrin", "Pedrin@gmail.com", "Pedrin1243124@", "USER");
         userResponse = new UserResponse(superUser, "Markin", "otaviocolela123@gmail.com" );
     }
-    
+
     @Test
     public void mustGetAllUsers() {
         var users = List.of(userEntity, userEntity);
