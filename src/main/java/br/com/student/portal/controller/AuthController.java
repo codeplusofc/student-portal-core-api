@@ -3,23 +3,26 @@ package br.com.student.portal.controller;
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
-import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
 import br.com.student.portal.security.TokenService;
+import br.com.student.portal.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static br.com.student.portal.validation.UserValidator.validateFields;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("api/users")
@@ -32,6 +35,8 @@ public class AuthController {
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UserRequest user){
@@ -39,23 +44,21 @@ public class AuthController {
         var auth = this.authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((UserEntity)auth.getPrincipal());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(CREATED).body(token);
     }
 
-    public UserResponse createUser(UserRequest userRequest) {
-        var userEntity = userMapper.userRequestIntoUserEntity(userRequest);
-        validateFields(userEntity);
-        if(userRepository.findByEmail(userRequest.getEmail()) != null){
-            throw new BadRequestException("There's another user with this email");
-        }
-        var encryptedPassword = new BCryptPasswordEncoder().encode(userEntity.getPassword());
-        var user = new UserEntity(userEntity.getName()
-                ,userEntity.getEmail()
-                ,encryptedPassword
-                ,userEntity.getRole());
+    @Operation(summary = "Create User")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created with sucessful",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserEntity.class))),
+            @ApiResponse(responseCode = "400", description = "User already exists")})
 
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> createUser(UserRequest userRequest) {
+        var user = authService.createUser(userRequest);
+        return ResponseEntity.status(CREATED).body(user);
 
-        return userMapper.userEntityIntoUserResponse(userRepository.save(user));
 
     }
 }
