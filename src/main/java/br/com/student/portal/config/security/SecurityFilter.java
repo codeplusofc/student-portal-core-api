@@ -1,4 +1,4 @@
-package br.com.student.portal.security;
+package br.com.student.portal.config.security;
 
 import br.com.student.portal.repository.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -22,20 +22,27 @@ public class SecurityFilter extends OncePerRequestFilter {
     private AuthorizationService authorizationService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var token = recoverToken(request);
-        if(token != null){
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        var token = this.recoverToken(request);
+        if (token != null) {
             var login = tokenService.validateToken(token);
-            var user = userRepository.findByEmail(token);
-            var autentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(autentication);
-            filterChain.doFilter(request, response);
+            var user = userRepository.findByEmail(login);
+
+            var authentication = new UsernamePasswordAuthenticationToken(user, null,
+                    user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
+<<<<<<< HEAD:src/main/java/br/com/student/portal/security/SecurityFilter.java
         if(authHeader == null || authHeader.isEmpty()){
+=======
+        if(authHeader == null){
+>>>>>>> 1fce4d87ff72ffa5bd9de6525e302fc479e40f90:src/main/java/br/com/student/portal/config/security/SecurityFilter.java
             return null;
         }
         return authHeader.replace("Bearer", "");

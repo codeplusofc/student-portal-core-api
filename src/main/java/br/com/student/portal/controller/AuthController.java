@@ -5,7 +5,7 @@ import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
 import br.com.student.portal.mapper.UserMapper;
 import br.com.student.portal.repository.UserRepository;
-import br.com.student.portal.security.TokenService;
+import br.com.student.portal.config.security.TokenService;
 import br.com.student.portal.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,10 +55,9 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "User already exists")})
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> createUser(UserRequest userRequest) {
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
         var user = authService.createUser(userRequest);
+
         return ResponseEntity.status(CREATED).body(user);
-
-
     }
 }

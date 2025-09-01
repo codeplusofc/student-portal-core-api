@@ -1,4 +1,4 @@
-package br.com.student.portal.security;
+package br.com.student.portal.config.security;
 
 import br.com.student.portal.entity.UserEntity;
 import com.auth0.jwt.JWT;
