@@ -42,7 +42,7 @@ public class TokenService {
                     .getSubject();
 
         }catch (JWTVerificationException jwtVerificationException){
-            throw new JWTVerificationException("Erro ao gerar um token", jwtVerificationException);
+            throw new JWTVerificationException("Erro ao validar token", jwtVerificationException);
         }
     }
 }
