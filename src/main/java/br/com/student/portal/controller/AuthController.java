@@ -3,8 +3,6 @@ package br.com.student.portal.controller;
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.entity.UserEntity;
-import br.com.student.portal.mapper.UserMapper;
-import br.com.student.portal.repository.UserRepository;
 import br.com.student.portal.config.security.TokenService;
 import br.com.student.portal.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,26 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("api/users")
 public class AuthController {
-    @Autowired
+
     private AuthenticationManager authenticationManager;
-    @Autowired
     private TokenService tokenService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserRequest user){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-        var token = tokenService.generateToken((UserEntity)auth.getPrincipal());
+    public ResponseEntity<String> login(@RequestBody @Valid UserRequest user){
 
-        return ResponseEntity.status(CREATED).body(token);
+        return ResponseEntity.status(CREATED).body(authService.loginUser(user));
     }
 
     @Operation(summary = "Create User")
@@ -55,9 +45,8 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "User already exists")})
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        var user = authService.createUser(userRequest);
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
 
-        return ResponseEntity.status(CREATED).body(user);
+        return ResponseEntity.status(CREATED).body(authService.createUser(user));
     }
 }

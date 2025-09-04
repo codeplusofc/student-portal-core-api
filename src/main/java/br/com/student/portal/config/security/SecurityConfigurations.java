@@ -24,13 +24,24 @@ public class SecurityConfigurations {
         this.securityFilter = securityFilter;
     }
 
+    private static final String[] SWAGGER_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/file/upload").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/file/videos").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/users/create").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/users/register").permitAll()
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.PUT, "api/users/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/users").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "api/users/{id}").permitAll().anyRequest().authenticated()

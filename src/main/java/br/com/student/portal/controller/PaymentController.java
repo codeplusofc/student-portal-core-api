@@ -2,17 +2,19 @@ package br.com.student.portal.controller;
 
 import br.com.student.portal.entity.Payment;
 import br.com.student.portal.service.PaymentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.FOUND;
+
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/payments")
 public class PaymentController {
 
-    @Autowired
     private PaymentService paymentService;
 
     @GetMapping
@@ -28,8 +30,8 @@ public class PaymentController {
     }
 
     @GetMapping("/student/{studentId}")
-    public List<Payment> getPaymentsByStudentId(@PathVariable Long studentId) {
-        return paymentService.getPaymentsByStudentId(studentId);
+    public ResponseEntity<List<Payment>> getPaymentsByStudentId(@PathVariable Long studentId) {
+        return ResponseEntity.status(FOUND).body(paymentService.getPaymentsByStudentId(studentId));
     }
 
     @PostMapping

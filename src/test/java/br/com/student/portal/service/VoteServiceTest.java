@@ -1,8 +1,5 @@
 package br.com.student.portal.service;
 
-
-import br.com.student.portal.dto.user.UserRequest;
-import br.com.student.portal.dto.user.UserResponse;
 import br.com.student.portal.dto.vote.VoteRequest;
 import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.AgendaEntity;
@@ -15,7 +12,6 @@ import br.com.student.portal.repository.UserRepository;
 import br.com.student.portal.repository.VoteRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,11 +41,7 @@ public class VoteServiceTest {
     @InjectMocks
     private VoteService voteService;
     @Mock
-    private UserRequest userRequest;
-    @Mock
     private UserEntity userEntity;
-    @Mock
-    private UserResponse userResponse;
     @Mock
     private VoteRequest voteRequest;
     @Mock
@@ -62,7 +54,7 @@ public class VoteServiceTest {
     @Before
     public void setup() {
         voteRequest = new VoteRequest(true, AGENDA_ID, USER_ID);
-        voteEntity = new VoteEntity(VOTE_ID , AGENDA_ID, USER_ID, true);
+        voteEntity = new VoteEntity(VOTE_ID , true, USER_ID, AGENDA_ID);
         voteResponse = new VoteResponse(VOTE_ID, true, USER_ID, AGENDA_ID);
         agendaEntity = new AgendaEntity(AGENDA_ID
                 , LocalDateTime.of(2999, 8, 15, 11, 24, 53)

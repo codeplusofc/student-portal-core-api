@@ -24,8 +24,6 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-
-
     public List<UserResponse> getAllUsers() {
         var users = userRepository.findAll();
 

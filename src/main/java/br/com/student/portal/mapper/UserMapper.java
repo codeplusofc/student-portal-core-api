@@ -2,16 +2,27 @@ package br.com.student.portal.mapper;
 
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
+import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.UserEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import br.com.student.portal.exception.ObjectNotFoundException;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class UserMapper {
-    public static final UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    public abstract UserEntity userRequestIntoUserEntity(UserRequest userRequest);
 
-    public abstract UserResponse userEntityIntoUserResponse(UserEntity userEntity);
+@Component
+public class UserMapper {
+
+
+    public UserResponse userEntityIntoUserResponse(UserEntity userEntity){
+        return new UserResponse(userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getEmail());
+    }
+
+    public UserEntity userRequestIntoUserEntity(UserRequest userRequest){
+        return new UserEntity(userRequest.getName(),
+                userRequest.getPassword(),
+                userRequest.getEmail(), "USER");
+    }
 }
+
