@@ -29,7 +29,7 @@ public class UserEntity implements UserDetails {
     private String email;
     private String password;
     private String role;
-    private boolean accessEnable;
+    private boolean accessEnable = false;
 
     public UserEntity(String name, String email, String password, String role) {
         this.name = name;

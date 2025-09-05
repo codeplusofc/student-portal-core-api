@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/users")
+@RequestMapping("api/auth")
 public class AuthController {
 
     private AuthenticationManager authenticationManager;
@@ -33,7 +32,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid UserRequest user){
-
         return ResponseEntity.status(CREATED).body(authService.loginUser(user));
     }
 
@@ -43,10 +41,8 @@ public class AuthController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserEntity.class))),
             @ApiResponse(responseCode = "400", description = "User already exists")})
-
     @PostMapping("/register")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
-
         return ResponseEntity.status(CREATED).body(authService.createUser(user));
     }
 }

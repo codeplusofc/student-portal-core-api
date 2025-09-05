@@ -40,7 +40,8 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-    @GetMapping()
+
+    @GetMapping("/access")
     public ResponseEntity<List<FileEntity>> accessVideos(@PathVariable UUID id){
             return ResponseEntity.status(FOUND).body(fileService.getAllFiles(id));
         }
