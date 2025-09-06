@@ -9,4 +9,6 @@ public class FixedData {
     public static final UUID USER_ID = UUID.fromString("321e4567-e89b-12d3-a456-426614174000");
     public static final UUID AGENDA_ID = UUID.fromString("231e4567-e89b-12d3-a456-426614174000");
     public static final UUID TASK_ID = UUID.fromString("999e4567-e89b-12d3-a456-426614174000");
+    public static final UUID STUDENT_ID = UUID.fromString("922e4567-e89b-12d3-a456-426614174000");
+    public static final String STUDENT_REGISTRATION = "912e4567-e89b-12d3-a456-426614174000";
 }
