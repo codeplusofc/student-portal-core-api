@@ -1,7 +1,6 @@
 package br.com.student.portal.service;
 
 import br.com.student.portal.dto.student.StudentRequest;
-import br.com.student.portal.dto.student.StudentResponse;
 import br.com.student.portal.entity.StudentEntity;
 import br.com.student.portal.exception.ObjectNotFoundException;
 import br.com.student.portal.repository.StudentRepository;
@@ -39,8 +38,8 @@ public class StudentServiceTest {
 
     @Before
     public void setup() {
-        var studentRequest = new StudentRequest("Otavio", STUDENT_REGISTRATION, "SPRING BOOT");
-        var studentEntity = new StudentEntity(STUDENT_ID, studentRequest.getRegistration(), studentRequest.getName(), studentRequest.getCourse());
+         studentRequest = new StudentRequest("Otavio", STUDENT_REGISTRATION, "SPRING BOOT");
+         studentEntity = new StudentEntity(STUDENT_ID, studentRequest.getRegistration(), studentRequest.getName(), studentRequest.getCourse());
     }
 
     @Test
@@ -89,7 +88,7 @@ public class StudentServiceTest {
 
     @Test
     public void mustUpdateStudent(){
-        given(studentRepository.findById(STUDENT_ID)).willReturn(Optional.ofNullable(studentEntity));
+        given(studentRepository.findById(STUDENT_ID)).willReturn(Optional.of(studentEntity));
         given(studentRepository.save(studentEntity)).willReturn(studentEntity);
         var toUpdate = new StudentRequest("Pedrin", STUDENT_REGISTRATION, "Cursinho top");
         var result = studentService.updateStudent(STUDENT_ID, toUpdate);
@@ -100,7 +99,7 @@ public class StudentServiceTest {
     }
     @Test
     public void mustDeleteStudent(){
-        given(studentRepository.findById(STUDENT_ID)).willReturn(Optional.ofNullable(studentEntity));
+        given(studentRepository.findById(STUDENT_ID)).willReturn(Optional.of(studentEntity));
         studentService.deleteStudent(STUDENT_ID);
         verify(studentRepository, times(1)).delete(studentEntity);
 
