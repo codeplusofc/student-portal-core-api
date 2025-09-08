@@ -14,11 +14,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static br.com.student.portal.data.FixedData.*;
-import static br.com.student.portal.validation.StudentValidator.validateFields;
-import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,21 +29,23 @@ public class StudentServiceTest {
     private StudentRepository studentRepository;
     @InjectMocks
     private StudentService studentService;
-
+    @Mock
     private StudentEntity studentEntity;
+    @Mock
     private StudentRequest studentRequest;
+
+
 
 
     @Before
     public void setup() {
-        this.studentRequest = new StudentRequest("Otavio", STUDENT_REGISTRATION, "SPRING BOOT");
-        this.studentEntity = new StudentEntity(STUDENT_ID, studentRequest.getRegistration(), studentRequest.getName(), studentRequest.getCourse());
+        var studentRequest = new StudentRequest("Otavio", STUDENT_REGISTRATION, "SPRING BOOT");
+        var studentEntity = new StudentEntity(STUDENT_ID, studentRequest.getRegistration(), studentRequest.getName(), studentRequest.getCourse());
     }
 
     @Test
     public void mustCreateStudent() {
-        given(studentRepository.save(any(StudentEntity.class)))
-                .willReturn(studentEntity);
+        given(studentRepository.save(any(StudentEntity.class))).willReturn(studentEntity);
         var result = studentService.createStudent(studentRequest);
 
         assertEquals("Otavio", result.getName());
@@ -56,18 +55,7 @@ public class StudentServiceTest {
     }
 
 
-//    public StudentResponse createStudent(StudentRequest studentRequest) {
-//        var student = new StudentEntity(studentRequest.getName(),
-//                studentRequest.getCourse());
-//
-//        validateFields(student);
-//
-//        var studentSaved = studentRepository.save(student);
-//
-//        return new StudentResponse(studentSaved.getId(),
-//                studentSaved.getName(),
-//                studentSaved.getCourse(), studentSaved.getRegistration());
-//    }
+
 
 
 
