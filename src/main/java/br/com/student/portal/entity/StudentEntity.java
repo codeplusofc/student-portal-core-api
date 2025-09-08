@@ -2,6 +2,7 @@ package br.com.student.portal.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,13 @@ public class StudentEntity {
     private String name;
     private String registration;
     private String course;
+
+    public StudentEntity(UUID id, String registration, String name, String course) {
+        this.id = id;
+        this.registration = registration;
+        this.name = name;
+        this.course = course;
+    }
 
     public StudentEntity(String name, String course) {
         this.name = name;

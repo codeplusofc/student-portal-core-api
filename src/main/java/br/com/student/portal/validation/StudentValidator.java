@@ -1,8 +1,12 @@
 package br.com.student.portal.validation;
 
+import br.com.student.portal.dto.student.StudentRequest;
+import br.com.student.portal.dto.student.StudentResponse;
 import br.com.student.portal.entity.StudentEntity;
 import br.com.student.portal.exception.BadRequestException;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 import static br.com.student.portal.validation.FieldValidator.validateRequiredField;
 import static io.micrometer.common.util.StringUtils.isEmpty;
@@ -33,3 +37,5 @@ public class StudentValidator {
 
     }
 }
+
+
