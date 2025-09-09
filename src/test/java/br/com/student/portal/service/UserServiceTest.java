@@ -45,7 +45,7 @@ public class UserServiceTest {
         userRequest = new UserRequest("Markin",
                 "otaviocolela123@gmail.com", "1234@OTAVIO!");
         userEntity =  new UserEntity("Pedrin", "Pedrin@gmail.com", "Pedrin1243124@", "USER");
-        userResponse = new UserResponse(superUser, "Markin", "otaviocolela123@gmail.com" );
+        userResponse = new UserResponse(superUser, "Markin", "otaviocolela123@gmail.com", "USER"  );
     }
 
     @Test

@@ -1,6 +1,5 @@
 package br.com.student.portal.config.security;
 
-import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,6 +38,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/file/upload").permitAll()
                         .requestMatchers(HttpMethod.GET, "/file/videos").permitAll()
+//                        .requestMatchers("/api/auth/register").permitAll()
+//                        .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
