@@ -3,16 +3,21 @@ package br.com.student.portal.mapper;
 import br.com.student.portal.dto.vote.VoteRequest;
 import br.com.student.portal.dto.vote.VoteResponse;
 import br.com.student.portal.entity.VoteEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public abstract class VoteMapper {
+@Component
+public class VoteMapper {
 
-    public static final VoteMapper INSTANCE = Mappers.getMapper(VoteMapper.class);
+    public VoteEntity voteRequestIntoVoteEntity(VoteRequest voteRequest){
+        return new VoteEntity(voteRequest.isVote(),
+                voteRequest.getUserId(),
+                voteRequest.getAgendaId());
+    }
 
-    public abstract VoteEntity voteRequestIntoVoteEntity(VoteRequest voteRequest);
+    public VoteResponse voteEntityIntoVoteResponse(VoteEntity voteEntity){
+        return new VoteResponse(voteEntity.getId(),
+                voteEntity.getAgendaId(),
+                voteEntity.getUserId());
 
-    public abstract VoteResponse voteEntityIntoVoteResponse(VoteEntity voteEntity);
+    }
 }

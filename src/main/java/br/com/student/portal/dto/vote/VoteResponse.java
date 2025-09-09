@@ -15,4 +15,9 @@ public class VoteResponse {
     private UUID userId;
     private UUID agendaId;
 
+    public VoteResponse(UUID id, UUID agendaId, UUID userId) {
+        this.id = id;
+        this.agendaId = agendaId;
+        this.userId = userId;
+    }
 }

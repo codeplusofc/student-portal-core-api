@@ -31,35 +31,21 @@ public class UserServiceTest {
     UserMapper userMapper;
     @Mock
     UserRepository userRepository;
-    @InjectMocks
-    UserService userService;
     @Mock
     UserRequest userRequest;
     @Mock
     UserEntity userEntity;
     @Mock
     UserResponse userResponse;
+    @InjectMocks
+    UserService userService;
 
     @Before
     public void setup() {
         userRequest = new UserRequest("Markin",
                 "otaviocolela123@gmail.com", "1234@OTAVIO!");
-        userEntity =  new UserEntity("Pedrin", "Pedrin@gmail.com", "Pedrin1243124@");
-        userResponse = new UserResponse(superUser, "Markin", "otaviocolela123@gmail.com" );
-    }
-
-    @Test
-    public void mustCreateUser() {
-        given(userMapper.userRequestIntoUserEntity(userRequest)).willReturn(userEntity);
-        given(userRepository.save(userEntity)).willReturn(userEntity);
-        given(userMapper.userEntityIntoUserResponse(userEntity)).willReturn(userResponse);
-
-        var result = userService.createUser(userRequest);
-
-        assertEquals("otaviocolela123@gmail.com", result.getEmail());
-        assertEquals("Markin", result.getName());
-        assertEquals(superUser, result.getId());
-
+        userEntity =  new UserEntity("Pedrin", "Pedrin@gmail.com", "Pedrin1243124@", "USER");
+        userResponse = new UserResponse(superUser, "Markin", "otaviocolela123@gmail.com", "USER"  );
     }
 
     @Test

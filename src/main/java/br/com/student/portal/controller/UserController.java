@@ -3,54 +3,36 @@ package br.com.student.portal.controller;
 
 import br.com.student.portal.dto.user.UserRequest;
 import br.com.student.portal.dto.user.UserResponse;
-import br.com.student.portal.entity.UserEntity;
+import br.com.student.portal.entity.FileEntity;
+import br.com.student.portal.service.FileService;
 import br.com.student.portal.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @CrossOrigin
 @RestController
+@AllArgsConstructor
 @RequestMapping("api/users")
 public class UserController {
 
+    private final FileService fileService;
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Operation(summary = "Create User")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User created with sucessful",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserEntity.class))),
-            @ApiResponse(responseCode = "400", description = "User already exists")})
-    @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        var user = userService.createUser(userRequest);
-        return ResponseEntity.status(CREATED).body(user);
-    }
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        var users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.status(FOUND).body(userService.getAllUsers());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @RequestBody UserRequest userEntityDetails) {
-        var updatedUser = userService.updateUser(id, userEntityDetails);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.status(OK).body(userService.updateUser(id, userEntityDetails));
     }
 
     @DeleteMapping("/{id}")
@@ -58,4 +40,10 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-}
+
+    @GetMapping("/access")
+    public ResponseEntity<List<FileEntity>> accessVideos(@PathVariable UUID id){
+            return ResponseEntity.status(FOUND).body(fileService.getAllFiles(id));
+        }
+    }
+
