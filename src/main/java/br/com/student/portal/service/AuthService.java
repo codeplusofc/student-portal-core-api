@@ -29,9 +29,9 @@ public class AuthService {
 
         validateFields(userEntity);
 
-        if (userRepository.findByEmail(userRequest.getEmail()) != null) {
-            throw new BadRequestException("There's another user with this email");
-        }
+//        if (userRepository.findByEmail(userRequest.getEmail()) != null) {
+//            throw new BadRequestException("There's another user with this email");
+//        }
 
         var encryptedPassword = new BCryptPasswordEncoder().encode(userEntity.getPassword());
 

@@ -23,7 +23,7 @@ public class TokenService {
             var alg = HMAC256(secret);
             return JWT.create()
                     .withIssuer("api/users")
-                    .withSubject(userEntity.getName())
+                    .withSubject(userEntity.getEmail())
                     .withExpiresAt(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")))
                     .sign(alg);
 

@@ -39,14 +39,14 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/file/upload").permitAll()
                         .requestMatchers(HttpMethod.GET, "/file/videos").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/users/create").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/users/register").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .requestMatchers(HttpMethod.PUT, "api/users/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/users").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "api/users/{id}").permitAll().anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/users/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/{id}").permitAll().anyRequest().authenticated()
                 )
-                .addFilterBefore((Filter) securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
