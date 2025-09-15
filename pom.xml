@@ -18,6 +18,7 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
