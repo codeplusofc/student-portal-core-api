@@ -1,10 +1,8 @@
 package br.com.student.portal.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.com.student.portal.entity.forgotPassword.ForgotPasswordEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +28,7 @@ public class UserEntity implements UserDetails {
     private String password;
     private String role;
     private boolean accessEnable = false;
+    private String updatePassword;
 
     public UserEntity(String name, String email, String password, String role) {
         this.name = name;
@@ -37,6 +36,9 @@ public class UserEntity implements UserDetails {
         this.password = password;
         this.role = role;
     }
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ForgotPasswordEntity forgotPasswordEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
