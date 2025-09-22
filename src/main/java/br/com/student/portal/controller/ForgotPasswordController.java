@@ -38,7 +38,7 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePasswordHandler(@RequestBody ChangePasswordRequest changePasswordRequest, @PathVariable String email){
-        return forgotPasswordService.changePassword(changePasswordRequest, email);
+    public ResponseEntity<String> changePasswordHandler(@RequestBody ChangePasswordRequest changePasswordRequest){
+        return forgotPasswordService.changePassword(changePasswordRequest);
     }
 }

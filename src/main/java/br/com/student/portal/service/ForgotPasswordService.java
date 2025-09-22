@@ -48,10 +48,10 @@ public class ForgotPasswordService {
 
         ForgotPasswordEntity forgotPassword = ForgotPasswordEntity.builder()
                 .otp(otp)
-                .expirationTime(LocalDateTime.now().plusMinutes(3))
+                .expirationTime(LocalDateTime.now().plusMinutes(8))
                 .user(user)
                 .build();
-        emailService.sendSimpleMessage(mailBody);
+       emailService.sendSimpleMessage(mailBody);
         forgotPasswordRepository.save(forgotPassword);
 
         return ResponseEntity.ok("Email sent for verification");
@@ -88,13 +88,13 @@ public class ForgotPasswordService {
         return ResponseEntity.ok("OTP verified successfully");
     }
 
-    public ResponseEntity<String> changePassword(ChangePasswordRequest changePasswordRequest, String email){
+    public ResponseEntity<String> changePassword(ChangePasswordRequest changePasswordRequest){
         if(!Objects.equals(changePasswordRequest.password(), changePasswordRequest.repeatPassword())){
             throw new BadRequestException("The password doesnt match");
         }
 
         String encodedPassword = passwordEncoder.encode(changePasswordRequest.password());
-        userRepository.updatePassword(email, encodedPassword);
+        userRepository.updatePassword(changePasswordRequest.email(), encodedPassword);
         return ResponseEntity.ok("Password changed");
     }
 
