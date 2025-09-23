@@ -8,6 +8,7 @@ import br.com.student.portal.entity.forgotPassword.ForgotPasswordEntity;
 import br.com.student.portal.exception.BadRequestException;
 import br.com.student.portal.repository.ForgotPasswordRepository;
 import br.com.student.portal.repository.UserRepository;
+import br.com.student.portal.validation.ForgotPasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static br.com.student.portal.validation.UserValidator.validateEmail;
+import static br.com.student.portal.validation.UserValidator.validatePassword;
 
 
 @Service
@@ -29,15 +33,14 @@ public class ForgotPasswordService {
     private EmailService emailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ForgotPasswordValidator forgotPasswordValidator;
 
 
-    public ResponseEntity<String> verifyEmail(String email){
-        UserEntity user = userRepository.findUserByEmail(email);
-        if(user == null){
-            return ResponseEntity.badRequest().body("Please provide a valid email");
-        }
 
 
+    public ResponseEntity<String> sendEmail(String email){
+        forgotPasswordValidator.findByEmail(email);
         String otp = otpGenerator();
 
         MailBody mailBody = MailBody.builder()
@@ -49,9 +52,9 @@ public class ForgotPasswordService {
         ForgotPasswordEntity forgotPassword = ForgotPasswordEntity.builder()
                 .otp(otp)
                 .expirationTime(LocalDateTime.now().plusMinutes(8))
-                .user(user)
+                .user(forgotPasswordValidator.findByEmail(email))
                 .build();
-       emailService.sendSimpleMessage(mailBody);
+       emailService.sendEmail(mailBody);
         forgotPasswordRepository.save(forgotPassword);
 
         return ResponseEntity.ok("Email sent for verification");
@@ -68,33 +71,25 @@ public class ForgotPasswordService {
 
 
     public ResponseEntity<String> verifyOtp(OtpRequest otpRequest){
-        UserEntity user = userRepository.findUserByEmail(otpRequest.getEmail());
-        if(user == null){
-            return ResponseEntity.badRequest().body("Please provide a valid email");
-        }
+        UserEntity user = forgotPasswordValidator.findByEmail(otpRequest.getEmail());
+        forgotPasswordValidator.validateEmailFields(otpRequest);
         ForgotPasswordEntity forgotPasswordEntity = forgotPasswordRepository
                 .findByOtpAndUser(otpRequest.getOtp(), user)
                 .orElse(null);
-
-        if (forgotPasswordEntity == null) {
-            return ResponseEntity.badRequest().body("Invalid OTP for this email");
-        }
-
-        if(forgotPasswordEntity.getExpirationTime().isBefore(LocalDateTime.now())) {
-            forgotPasswordRepository.deleteById(forgotPasswordEntity.getForgotPasswordId());
-            return ResponseEntity.status(422).body("OTP has expired");
-        }
+        forgotPasswordValidator.validateForgotPasswordFields(forgotPasswordEntity);
+        assert forgotPasswordEntity != null;
         forgotPasswordRepository.deleteById(forgotPasswordEntity.getForgotPasswordId());
         return ResponseEntity.ok("OTP verified successfully");
     }
 
     public ResponseEntity<String> changePassword(ChangePasswordRequest changePasswordRequest){
         if(!Objects.equals(changePasswordRequest.password(), changePasswordRequest.repeatPassword())){
-            throw new BadRequestException("The password doesnt match");
+            return ResponseEntity.badRequest().body("The password doesnt match");
         }
 
         String encodedPassword = passwordEncoder.encode(changePasswordRequest.password());
         userRepository.updatePassword(changePasswordRequest.email(), encodedPassword);
+        validatePassword(changePasswordRequest.password());
         return ResponseEntity.ok("Password changed");
     }
 

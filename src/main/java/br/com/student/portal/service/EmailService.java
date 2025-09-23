@@ -15,7 +15,7 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendSimpleMessage(MailBody mailBody){
+    public void sendEmail(MailBody mailBody){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailBody.to());
         message.setFrom("contatocodeplus@gmail.com");

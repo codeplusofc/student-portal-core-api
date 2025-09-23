@@ -24,12 +24,12 @@ public class ForgotPasswordController {
 
     // Endpoint para enviar OTP por e-mail
     @PostMapping("/verify-mail")
-    public ResponseEntity<String> verifyEmail(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<String> sendEmail(@RequestBody UserRequest userRequest) {
         String email = userRequest.getEmail();
         if (email == null || email.isBlank()) {
             return ResponseEntity.badRequest().body("Email must be provided");
         }
-        return forgotPasswordService.verifyEmail(email);
+        return forgotPasswordService.sendEmail(email);
     }
 
     @PostMapping("/verify-otp")
@@ -38,7 +38,7 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePasswordHandler(@RequestBody ChangePasswordRequest changePasswordRequest){
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
         return forgotPasswordService.changePassword(changePasswordRequest);
     }
 }

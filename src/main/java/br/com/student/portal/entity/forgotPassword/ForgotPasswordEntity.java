@@ -19,11 +19,11 @@ public class ForgotPasswordEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int forgotPasswordId;
-    @Column(nullable = false)
+    private int forgotPasswordId;
+    @Column(nullable = false, length = 6)
     private String otp;
     @Column(nullable = false)
-    public LocalDateTime expirationTime;
+    private LocalDateTime expirationTime;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
