@@ -38,8 +38,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/file/upload").permitAll()
                         .requestMatchers(HttpMethod.GET, "/file/videos").permitAll()
-//                        .requestMatchers("/api/auth/register").permitAll()
-//                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api-zipcode/get").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/forgot-password/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
