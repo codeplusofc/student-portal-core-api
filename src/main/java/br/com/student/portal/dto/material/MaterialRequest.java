@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class MaterialRequest {
     private String name;
     private String description;
-    private String category;  // "MATEMATICA", "PORTUGUES", etc.
-    // ❌ REMOVA courseId se não for usar
+    private String category;
 }

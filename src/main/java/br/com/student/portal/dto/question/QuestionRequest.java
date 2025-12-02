@@ -1,5 +1,6 @@
 package br.com.student.portal.dto.question;
 
+import br.com.student.portal.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,5 @@ public class QuestionRequest {
 
     private String title;
     private String content;
-    private String authorId;
-    private String authorName;
+    private UserEntity userEntity;
 }

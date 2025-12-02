@@ -14,10 +14,10 @@ public class MaterialResponse {
     private String id;
     private String name;
     private String description;
-    private String filename;        // ✅ ADICIONE ESTE CAMPO
+    private String filename;
     private String category;
-    private String uploaderId;      // ✅ TROQUE courseId por uploaderId
-    private String uploaderName;    // ✅ ADICIONE ESTE CAMPO
-    private Long downloads;         // ✅ ADICIONE ESTE CAMPO
+    private String uploaderId;
+    private String uploaderName;
+    private Long downloads;
     private String uploadDate;
 }

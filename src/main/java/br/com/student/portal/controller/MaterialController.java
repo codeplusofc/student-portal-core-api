@@ -31,51 +31,51 @@ public class MaterialController {
             @RequestParam("category") String category,
             Authentication authentication) throws IOException {
 
-        MaterialRequest request = MaterialRequest.builder()
+        var request = MaterialRequest.builder()
                 .name(name)
                 .description(description)
                 .category(category)
                 .build();
 
-        UserEntity uploadedBy = (UserEntity) authentication.getPrincipal();
-        MaterialResponse response = materialService.createMaterial(request, file, uploadedBy);
+        var uploadedBy = (UserEntity) authentication.getPrincipal();
+        var response = materialService.createMaterial(request, file, uploadedBy);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<MaterialResponse>> getAllMaterials() {
-        List<MaterialResponse> materials = materialService.getAllMaterials();
+        var materials = materialService.getAllMaterials();
         return ResponseEntity.ok(materials);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MaterialResponse> getMaterial(@PathVariable UUID id) {
-        MaterialResponse material = materialService.getMaterialById(id);
+        var material = materialService.getMaterialById(id);
         return ResponseEntity.ok(material);
     }
 
     @GetMapping("/category/{category}")
     public ResponseEntity<List<MaterialResponse>> getMaterialsByCategory(@PathVariable String category) {
-        List<MaterialResponse> materials = materialService.getMaterialsByCategory(category);
+        var materials = materialService.getMaterialsByCategory(category);
         return ResponseEntity.ok(materials);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<MaterialResponse>> searchMaterials(@RequestParam String term) {
-        List<MaterialResponse> materials = materialService.searchMaterials(term);
+        var materials = materialService.searchMaterials(term);
         return ResponseEntity.ok(materials);
     }
 
     @GetMapping("/uploader/{userId}")
     public ResponseEntity<List<MaterialResponse>> getMaterialsByUploader(@PathVariable UUID userId) {
-        List<MaterialResponse> materials = materialService.getMaterialsByUploader(userId);
+        var materials = materialService.getMaterialsByUploader(userId);
         return ResponseEntity.ok(materials);
     }
 
     @GetMapping("/most-downloaded")
     public ResponseEntity<List<MaterialResponse>> getMostDownloadedMaterials(
             @RequestParam(defaultValue = "10") int limit) {
-        List<MaterialResponse> materials = materialService.getMostDownloadedMaterials(limit);
+        var materials = materialService.getMostDownloadedMaterials(limit);
         return ResponseEntity.ok(materials);
     }
 
@@ -84,8 +84,9 @@ public class MaterialController {
             @PathVariable UUID id,
             @RequestBody MaterialRequest request,
             Authentication authentication) {
-        UserEntity uploadedBy = (UserEntity) authentication.getPrincipal();
-        MaterialResponse response = materialService.updateMaterial(id, request, uploadedBy);
+
+        var uploadedBy = (UserEntity) authentication.getPrincipal();
+        var response = materialService.updateMaterial(id, request, uploadedBy);
         return ResponseEntity.ok(response);
     }
 
@@ -93,7 +94,8 @@ public class MaterialController {
     public ResponseEntity<Void> deleteMaterial(
             @PathVariable UUID id,
             Authentication authentication) {
-        UserEntity uploadedBy = (UserEntity) authentication.getPrincipal();
+
+        var uploadedBy = (UserEntity) authentication.getPrincipal();
         materialService.deleteMaterial(id, uploadedBy);
         return ResponseEntity.noContent().build();
     }

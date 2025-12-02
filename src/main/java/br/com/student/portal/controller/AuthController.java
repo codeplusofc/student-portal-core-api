@@ -18,30 +18,15 @@ public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * Registrar novo usuário
-     * POST /api/auth/register
-     */
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRequest userRequest) {
-        UserResponse registeredUser = authService.registerUser(userRequest);
+        var registeredUser = authService.registerUser(userRequest);
         return ResponseEntity.status(CREATED).body(registeredUser);
     }
 
-    /**
-     * Fazer login - Autenticar usuário com matrícula e senha
-     * POST /api/auth/login
-     *
-     * Body esperado:
-     * {
-     *   "registration": "2025001",
-     *   "password": "Senha123!"
-     * }
-     */
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@RequestBody UserRequest loginRequest) {
-        // ✅ Usar PasswordEncoder para verificar a senha de forma segura
-        UserResponse user = authService.login(
+        var user = authService.login(
                 loginRequest.getRegistration(),
                 loginRequest.getPassword()
         );

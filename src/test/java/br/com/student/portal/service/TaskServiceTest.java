@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static br.com.student.portal.data.FixedData.AGENDA_ID;
 import static br.com.student.portal.data.FixedData.TASK_ID;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;

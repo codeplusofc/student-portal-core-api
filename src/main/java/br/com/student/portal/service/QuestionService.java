@@ -49,48 +49,45 @@ public class QuestionService {
                 .map(this::mapToResponse);
     }
 
-    public QuestionResponse createQuestion(QuestionRequest request, UserEntity author) {
+    public QuestionResponse createQuestion(QuestionRequest request) {
         log.info("Criando nova pergunta: {}", request.getTitle());
 
         QuestionEntity question = QuestionEntity.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
-                .authorId(author.getId().toString())
-                .authorName(author.getName())
+                .author(request.getUserEntity())
                 .build();
 
         QuestionEntity savedQuestion = questionRepository.save(question);
         return mapToResponse(savedQuestion);
     }
 
-    public QuestionResponse updateQuestion(UUID id, QuestionRequest request, UserEntity author) {
+    public QuestionResponse updateQuestion(UUID id, QuestionRequest questionRequest) {
         log.info("Atualizando pergunta ID: {}", id);
 
         QuestionEntity existingQuestion = questionRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Pergunta não encontrada"));
 
-        // Verificar se o usuário é o autor
-        if (!existingQuestion.getAuthorId().equals(author.getId().toString())) {
+        if (!existingQuestion.getAuthor().getId().equals(questionRequest.getUserEntity().getId())) {
             throw new RuntimeException("Apenas o autor pode editar a pergunta");
         }
 
-        existingQuestion.setTitle(request.getTitle());
-        existingQuestion.setContent(request.getContent());
-        existingQuestion.setAuthorName(author.getName());
+        existingQuestion.setTitle(questionRequest.getTitle());
+        existingQuestion.setContent(questionRequest.getContent());
+        existingQuestion.setAuthor(questionRequest.getUserEntity());
 
         QuestionEntity updatedQuestion = questionRepository.save(existingQuestion);
         return mapToResponse(updatedQuestion);
     }
 
-    public void deleteQuestion(UUID id, UserEntity requester) {
+    public void deleteQuestion(UUID id) {
         log.info("Deletando pergunta ID: {}", id);
 
         QuestionEntity question = questionRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Pergunta não encontrada"));
 
-        // Verificar se o usuário é o autor ou admin
-        boolean isAuthor = question.getAuthorId().equals(requester.getId().toString());
-        boolean isAdmin = requester.getAuthorities().stream()
+        boolean isAuthor = question.getAuthor().getId().equals(question.getId().toString());
+        boolean isAdmin = question.getAuthor().getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
 
         if (!isAuthor && !isAdmin) {
@@ -104,7 +101,6 @@ public class QuestionService {
     public List<QuestionResponse> searchQuestions(String term) {
         log.info("Buscando perguntas com termo: {}", term);
 
-        // ✅ CRITICAL FIX: Usar a query do repositório em vez de findAll()
         return questionRepository.searchByTerm(term)
                 .stream()
                 .map(this::mapToResponse)
@@ -114,10 +110,9 @@ public class QuestionService {
     @Transactional(readOnly = true)
     public Page<QuestionResponse> searchQuestions(String term, Pageable pageable) {
         log.info("Buscando perguntas paginadas com termo: {}", term);
-        // Nota: Você precisaria criar uma query paginada no repositório
-        // Por enquanto, vamos usar a versão não-paginada
+
         List<QuestionResponse> results = searchQuestions(term);
-        // Implementação de paginação em memória (para pequenos resultados)
+
         return new org.springframework.data.domain.PageImpl<>(
                 results.subList(
                         (int) pageable.getOffset(),
@@ -128,20 +123,15 @@ public class QuestionService {
         );
     }
 
-    // ✅ CORRIGIDO: Converter UUID e LocalDateTime para String
     private QuestionResponse mapToResponse(QuestionEntity entity) {
         return QuestionResponse.builder()
                 .id(entity.getId().toString())
                 .title(entity.getTitle())
                 .content(entity.getContent())
-                .authorId(entity.getAuthorId())
-                .authorName(entity.getAuthorName())
+                .author(entity.getAuthor())
                 .answerCount(entity.getAnswerCount() != null ? entity.getAnswerCount() : 0)
                 .createdAt(entity.getCreatedAt() != null ? entity.getCreatedAt().toString() : "")
                 .updatedAt(entity.getUpdatedAt() != null ? entity.getUpdatedAt().toString() : "")
                 .build();
-    }
-
-    public QuestionResponse createQuestion(QuestionRequest request) {
     }
 }

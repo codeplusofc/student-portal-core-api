@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserMapper {
 
-    private final PasswordEncoder passwordEncoder;  // ✅ INJETAR PasswordEncoder
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponse userEntityIntoUserResponse(UserEntity userEntity) {
         return new UserResponse(
@@ -23,16 +23,15 @@ public class UserMapper {
     }
 
     public UserEntity userRequestIntoUserEntity(UserRequest userRequest) {
-        UserEntity user = new UserEntity();
+        var user = new UserEntity();
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
 
-        // ✅ CRITICAL FIX: Sempre criptografar a senha!
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         user.setRegistration(userRequest.getRegistration());
-        user.setRole("USER");  // Define role padrão
-        user.setAccessEnable(true);  // Habilitar acesso por padrão
+        user.setRole("USER");
+        user.setAccessEnable(true);
         return user;
     }
 }

@@ -31,9 +31,6 @@ public class QuestionEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity author;
 
-    @Column(name = "author_name", nullable = false)
-    private String authorName;
-
     @Column(name = "answer_count")
     private Integer answerCount = 0;
 
@@ -55,9 +52,5 @@ public class QuestionEntity {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    public String getAuthorId() {
-        return null;
     }
 }
