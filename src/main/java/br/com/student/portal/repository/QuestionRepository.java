@@ -16,9 +16,5 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, UUID> 
             "LOWER(q.title) LIKE LOWER(CONCAT('%', :term, '%')) OR " +
             "LOWER(q.content) LIKE LOWER(CONCAT('%', :term, '%'))")
     List<QuestionEntity> searchByTerm(@Param("term") String term);
-
     List<QuestionEntity> findAllByOrderByCreatedAtDesc();
-
-    // ❌ REMOVA ESTA LINHA (já existe no JpaRepository):
-    // Optional<QuestionEntity> findById(UUID uuid);
 }

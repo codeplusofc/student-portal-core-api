@@ -24,11 +24,10 @@ public class UserMapper {
 
     public UserEntity userRequestIntoUserEntity(UserRequest userRequest) {
         var user = new UserEntity();
+
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
-
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-
         user.setRegistration(userRequest.getRegistration());
         user.setRole("USER");
         user.setAccessEnable(true);

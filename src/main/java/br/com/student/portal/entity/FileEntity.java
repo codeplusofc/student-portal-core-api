@@ -15,16 +15,7 @@ import java.util.UUID;
 public class FileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
-    String name;
-    String url;
-
-    public FileEntity(String name, String url, UUID id) {
-        this.name = name;
-        this.url = url;
-        this.id = id;
-    }
-
-    public FileEntity() {
-    }
+    private UUID id;
+    private String name;
+    private String url;
 }

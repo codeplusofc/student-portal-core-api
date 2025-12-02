@@ -13,8 +13,6 @@ import java.util.UUID;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<MaterialEntity, UUID> {
-
-    // Método gerado automaticamente pelo JPA
     List<MaterialEntity> findByCategory(MaterialEntity.MaterialCategory category);
 
     @Query("SELECT m FROM MaterialEntity m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :term, '%')) " +
@@ -28,6 +26,5 @@ public interface MaterialRepository extends JpaRepository<MaterialEntity, UUID> 
     @Query("SELECT m FROM MaterialEntity m WHERE m.uploadedBy.id = :userId ORDER BY m.uploadDate DESC")
     List<MaterialEntity> findByUploadedById(@Param("userId") UUID userId);
 
-    // Método para materiais mais baixados (usando Pageable)
     Page<MaterialEntity> findAllByOrderByDownloadsDesc(Pageable pageable);
 }

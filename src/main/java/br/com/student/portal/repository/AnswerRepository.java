@@ -11,8 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<AnswerEntity, UUID> {
-
-    // ✅ CORREÇÃO: Método exato que o Service está chamando
     @Query("SELECT a FROM AnswerEntity a WHERE a.question.id = :questionId ORDER BY a.createdAt ASC")
     List<AnswerEntity> findByQuestionId(@Param("questionId") UUID questionId);
 

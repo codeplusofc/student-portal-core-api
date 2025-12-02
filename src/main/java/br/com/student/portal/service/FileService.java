@@ -22,16 +22,11 @@ public class FileService {
     private final FileValidator fileValidator;
 
     public FileEntity createFile(FileEntity fileEntity) {
-        log.info("Criando arquivo: {}", fileEntity.getName());
         fileValidator.validateFields(fileEntity);
         return fileRepository.save(fileEntity);
     }
 
     public List<FileEntity> getAllFiles(UUID userId) {
-        log.info("Buscando arquivos para usuário ID: {}", userId);
-
-        // ✅ SIMPLIFICAÇÃO: Apenas verifica se usuário existe
-        // O controle de acesso já é feito pelo Spring Security
         if (!userRepository.existsById(userId)) {
             throw new ObjectNotFoundException("Usuário não encontrado com ID: " + userId);
         }
@@ -39,11 +34,8 @@ public class FileService {
         List<FileEntity> files = fileRepository.findAll();
 
         if (files.isEmpty()) {
-            log.info("Nenhum arquivo encontrado no repositório");
             return List.of();
         }
-
-        log.info("Retornando {} arquivos para usuário {}", files.size(), userId);
         return files;
     }
 }

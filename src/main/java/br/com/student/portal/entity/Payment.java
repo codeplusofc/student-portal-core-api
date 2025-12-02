@@ -22,13 +22,4 @@ public class Payment {
     private LocalDate dueDate;
     private String status;
     private String paymentMethod;
-
-    public Payment(Long studentId, Double amount, LocalDate dueDate, String status, String paymentMethod) {
-        this.studentId = studentId;
-        this.amount = amount;
-        this.dueDate = dueDate;
-        this.status = status;
-        this.paymentDate = null;
-        this.paymentMethod = paymentMethod;
-    }
 }

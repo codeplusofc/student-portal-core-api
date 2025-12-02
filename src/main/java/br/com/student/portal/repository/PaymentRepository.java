@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByStudentId(Long studentId);
-
     List<Payment> findByDueDateBeforeAndStatus(LocalDate date, String status);
 }

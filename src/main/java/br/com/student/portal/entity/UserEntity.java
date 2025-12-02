@@ -32,12 +32,11 @@ public class UserEntity implements UserDetails {
 
     private String role;
 
-    @Column(unique = true)  // ✅ ADICIONAR ESTE CAMPO
+    @Column(unique = true)
     private String registration;
 
     private boolean accessEnable = false;
 
-    // Construtor SEM registration (compatibilidade com código existente)
     public UserEntity(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
@@ -45,7 +44,6 @@ public class UserEntity implements UserDetails {
         this.role = role;
     }
 
-    // ✅ ADICIONAR ESTE NOVO CONSTRUTOR COM REGISTRATION
     public UserEntity(String name, String email, String password, String registration, String role) {
         this.name = name;
         this.email = email;
