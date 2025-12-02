@@ -24,7 +24,4 @@ public class FileEntity {
         this.url = url;
         this.id = id;
     }
-
-    public FileEntity() {
-    }
 }
