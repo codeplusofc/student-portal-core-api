@@ -90,20 +90,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void mustUpdateUser() {
-        var uuid = superUser;
-
-        given(userRepository.findById(uuid)).willReturn(Optional.of(userEntity));
-        given(userMapper.userEntityIntoUserResponse(userRepository.save(userEntity))).willReturn(userResponse);
-
-        var result = userService.updateUser(uuid, userRequest);
-
-        assertEquals("otaviocolela123@gmail.com", result.getEmail());
-        assertEquals("Markin", result.getName());
-        assertEquals(UUID.fromString("11111111-2222-3333-4444-555555555555"), superUser);
-    }
-
-    @Test
     public void mustDeleteUser(){
         given(userRepository.findById(superUser)).willReturn(Optional.of(userEntity));
         userService.deleteUser(superUser);

@@ -59,7 +59,6 @@ public class UserService {
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
 
-        // Se a senha foi fornecida, atualizar e criptografar
         if (userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         }
